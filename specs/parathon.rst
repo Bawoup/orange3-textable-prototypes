@@ -1,0 +1,111 @@
+﻿######################################
+Specification widget Parathon
+######################################
+
+1 Introduction
+**************
+
+1.1 But du projet
+=================
+Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte et en sortir les éléments paratextuels.
+
+1.2 Aperçu des etapes
+=====================
+* Premiere version de la specification: 24 mars 2022
+* Remise de la specification: 31 mars 2022
+* Version alpha du projet:  5 mai 2022
+* Remise et presentation du projet:  1er juin 2022
+
+1.3 Equipe et responsabilitées
+==============================
+
+* Lara Lambelet (`lara.lambelet.1@unil.ch`_):
+
+.. _lara.lambelet.1@unil.ch: mailto:lara.lambelet.1@unil.ch
+
+    - specification
+	- interface
+	- documentation
+
+* Joël Huck (`joel.huck@unil.ch`_):
+
+.. _joel.huck@unil.ch: mailto:joel.huck@unil.ch
+
+    - code
+	- tests
+	
+* Matthieu Perring (`matthieu.perring@unil.ch`_) :
+
+.. _matthieu.perring@unil.ch: mailto:matthieu.perring@unil.ch
+
+	- code
+	- tests
+
+* Zakari Rabet (`Zakari-Yacine.Rabet@unil.ch`_):
+.. _Zakari-Yacine.Rabet@unil.ch: mailto:Zakari-Yacine.Rabet@unil.ch
+
+	- code
+	- GitHub
+	- tests
+
+2. Technique
+************
+
+2.1 Dépendances
+===============
+
+* Orange 3.31
+
+* Orange Textable 3.1.11
+
+2.2 Fonctionnalités minimales
+=============================
+
+.. image:: images/parathon_minimal_version.png
+
+* permettre l'importation d'un texte.
+
+* choisir le format d'exportation entre xml et csv.
+
+* permettre de choisir un ou plusieurs dictionnaires de regex à appliquer au texte.
+
+* baliser le texte selon les regexs appliquées.
+
+* créer et émettre un document balisé selon le format choisi.
+
+2.3 Fonctionnalités principales
+===============================
+
+.. image:: images/parathon_basic_settings.png
+
+.. image:: images/parathon_advanced_settings.png
+
+* choix possible du mode Advanced settings
+
+* en mode Advanced settings, permet de choisir le type d'éléments paratextuels à retenir dans chaque dictionnaire sélectionné.
+
+2.4 Fonctionnalités optionnelles
+================================
+
+* permet d'afficher l'emplacement de chaque élément paratextuel retenu.
+
+2.5 Tests
+=========
+
+TODO
+
+3. Etapes
+*********
+
+3.1 Version alpha
+=================
+TODO
+
+3.2 Remise et présentation
+==========================
+TODO
+
+
+4. Infrastructure
+=================
+Le projet est disponible sur GitHub à l'adresse: TODO
