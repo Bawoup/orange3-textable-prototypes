@@ -63,7 +63,7 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 .. image:: images/parathon_minimal_version.png
 
-* permettre l'importation d'un texte.
+* permettre l'importation d'une segmentation d'un texte.
 
 * choisir le format d'exportation entre xml et csv.
 
@@ -71,7 +71,7 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 * baliser le texte selon les regexs appliquées.
 
-* créer et émettre une segmentation avec les éléments reconnus.
+* créer et émettre un document balisé selon le format choisi.
 
 2.3 Fonctionnalités principales
 ===============================
@@ -87,9 +87,7 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 2.4 Fonctionnalités optionnelles
 ================================
 
-* Créer et émettre la segemntaiton csv.
-
-* Créer et émettre la segmentation xml.
+* permet d'afficher l'emplacement de chaque élément paratextuel retenu.
 
 2.5 Tests
 =========
@@ -101,8 +99,7 @@ TODO
 
 3.1 Version alpha
 =================
-* L'interface graphique est complètement construite.
-* Les fonctionnalités minimales sont prises en charge par le logiciel.
+TODO
 
 3.2 Remise et présentation
 ==========================
