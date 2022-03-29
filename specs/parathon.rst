@@ -1,5 +1,5 @@
 ﻿######################################
-Specification widget Parathon
+Spécification widget Parathon
 ######################################
 
 1 Introduction
@@ -9,21 +9,21 @@ Specification widget Parathon
 =================
 Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte et en sortir les éléments paratextuels.
 
-1.2 Aperçu des etapes
+1.2 Aperçu des étapes
 =====================
-* Premiere version de la specification: 24 mars 2022
-* Remise de la specification: 31 mars 2022
-* Version alpha du projet:  5 mai 2022
-* Remise et presentation du projet:  1er juin 2022
+* Première version de la spécification: 24 mars 2022
+* Remise de la spécification: 31 mars 2022
+* Version alpha du projet: 5 mai 2022
+* Remise et présentation du projet: 1er juin 2022
 
-1.3 Equipe et responsabilitées
+1.3 Equipe et responsabilités
 ==============================
 
 * Lara Lambelet (`lara.lambelet.1@unil.ch`_):
 
 .. _lara.lambelet.1@unil.ch: mailto:lara.lambelet.1@unil.ch
 
-	- specification
+	- spécification
 	- interface
 	- documentation
 
@@ -63,15 +63,15 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 .. image:: images/parathon_minimal_version.png
 
-* permettre l'importation d'un texte.
+* Permettre l'importation d'un texte.
 
-* choisir le format d'exportation entre xml et csv.
+* Choisir le format d'exportation entre xml et csv.
 
-* permettre de choisir un ou plusieurs dictionnaires de regex à appliquer au texte.
+* Permettre de choisir un ou plusieurs dictionnaires de regex à appliquer au texte.
 
-* baliser le texte selon les regexs appliquées.
+* Baliser le texte selon les regexs appliquées.
 
-* créer et émettre une segmentation avec les éléments reconnus.
+* Créer et émettre une segmentation avec les éléments reconnus.
 
 2.3 Fonctionnalités principales
 ===============================
@@ -80,14 +80,14 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 .. image:: images/parathon_advanced_settings.png
 
-* choix possible du mode Advanced settings
+* Choix possible du mode Advanced settings.
 
-* en mode Advanced settings, permet de choisir le type d'éléments paratextuels à retenir dans chaque dictionnaire sélectionné.
+* En mode Advanced settings, permet de choisir le type d'éléments paratextuels à retenir dans chaque dictionnaire sélectionné.
 
 2.4 Fonctionnalités optionnelles
 ================================
 
-* Créer et émettre la segemntaiton csv.
+* Créer et émettre la segmentation csv.
 
 * Créer et émettre la segmentation xml.
 
@@ -102,12 +102,13 @@ TODO
 3.1 Version alpha
 =================
 * L'interface graphique est complètement construite.
-* Les fonctionnalités minimales sont prises en charge par le logiciel.
+* Les fonctionnalités minimales sont prises en charge par le logiciel et ont été testées.
 
 3.2 Remise et présentation
 ==========================
-TODO
-
+* Les fonctionnalités principales sont complétement prises en charge par le logiciel.
+* La documentation du logiciel est complète.
+* Les fonctionnalités principales (et, le cas échéant, optionnelles) sont implémentées et ont été testées.
 
 4. Infrastructure
 =================
