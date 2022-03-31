@@ -226,7 +226,7 @@ class Parathon(OWTextableBaseWidget):
         # Check that something has been selected...
         if len(self.selectedTitles) == 0:
             self.infoBox.setText(
-                "Please select one or more titles.",
+                "Please select one or more dictionaries.",
                 "warning"
             )
             self.send("XML-TEI data", None, self)
@@ -581,7 +581,7 @@ if __name__ == "__main__":
     import sys
     from PyQt5.QtWidgets import QApplication
     myApplication = QApplication(sys.argv)
-    myWidget = TheatreClassique()
+    myWidget = Parathon()
     myWidget.show()
     myApplication.exec_()
     myWidget.saveSettings()
