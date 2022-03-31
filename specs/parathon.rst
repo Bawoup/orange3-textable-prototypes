@@ -25,6 +25,7 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 	- spécification
 	- interface
+	- code
 	- documentation
 
 * Joël Huck (`joel.huck@unil.ch`_):
@@ -63,9 +64,7 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 .. image:: images/parathon_minimal_version.png
 
-* Permettre l'importation d'un texte.
-
-* Choisir le format d'exportation entre xml et csv.
+* Prendre une segmentation en Input
 
 * Permettre de choisir un ou plusieurs dictionnaires de regex à appliquer au texte.
 

@@ -60,8 +60,8 @@ class Parathon(OWTextableBaseWidget):
     #----------------------------------------------------------------------
     # Channel definitions (NB: no input in this case)...
 
-    inputs = [("Text Input", )]
-    outputs = [("XML-TEI data", Segmentation)]
+    inputs = [('Segmentation',Segmentation, 'inputData' )]
+    outputs = [('SegmentedText', Segmentation)]
 
     #----------------------------------------------------------------------
     # Settings...
@@ -71,7 +71,7 @@ class Parathon(OWTextableBaseWidget):
     )
 
     autoSend = settings.Setting(False)
-    selectedTitles = settings.Setting([])
+    selectedDictionaries = settings.Setting([])
     titleLabels = settings.Setting([])
     filterCriterion = settings.Setting("author")
     filterValue = settings.Setting("(all)")
