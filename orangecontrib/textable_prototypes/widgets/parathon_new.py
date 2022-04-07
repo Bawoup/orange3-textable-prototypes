@@ -47,6 +47,7 @@ class Detect(widget.OWWidget):
     
     want_main_area = False
     
+    autoSend = settings.Setting(False)
     savedDict = settings.Setting({})
     selectedDictionaries = settings.Setting([])
     dictLabels = settings.Setting([])
@@ -70,6 +71,16 @@ class Detect(widget.OWWidget):
             infoBoxAttribute="infoBox",
             sendIfPreCallback=self.updateGUI,
         )
+        
+        # Advanced settings...
+        self.advancedSettings = AdvancedSettings(
+            widget=self.controlArea,
+            master=self,
+            callback=self.showAdvancedTabs,
+        )
+        
+        self.advancedSettings.draw()
+        
 
         # Global box
         self.globalBox = gui.widgetBox(
@@ -140,15 +151,6 @@ class Detect(widget.OWWidget):
             )
 
         #-------------------------------------------------------------------
-        # Advanced settings...
-        self.advancedSettings = AdvancedSettings(
-            widget=self.controlArea,
-            master=self,
-            callback=None,
-        )
-        
-        self.advancedSettings.draw()
-        
         # Advanced settings box
         self.advancedBox = gui.widgetBox(
             widget=self.globalBox,
@@ -179,16 +181,21 @@ class Detect(widget.OWWidget):
         margin=5,
         )
         
-        self.advancedBox.layout().addWidget(self.tabs)
-        
-        
         # GUI separator...
         gui.separator(widget=self.globalBox)
         
         self.advancedSettings.advancedWidgets.append(self.advancedBox)
         self.advancedSettings.advancedWidgetsAppendSeparator()
         
-        self.getDictList()            
+        self.getDictList()
+        
+        # self.sendButton.draw()
+        self.infoBox.draw()
+        
+        
+
+    def showAdvancedTabs(self):
+        self.advancedBox.layout().addWidget(self.tabs)
     
     def inputData(self, segmentation, language=None, mode=None):
         # Process incoming segmentation
@@ -240,9 +247,6 @@ class Detect(widget.OWWidget):
             self.advancedSettings.setVisible(True)
         else:
             self.advancedSettings.setVisible(False)
-
-        if len(self.titleLabels) > 0:
-            self.selectedTitles = self.selectedTitles
     
     # Function for the detection of paralinguistic cues
     def parathon(self):
