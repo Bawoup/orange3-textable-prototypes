@@ -23,7 +23,7 @@ __version__ = "0.0.1"
 
 
 class Detect(widget.OWWidget):
-    """   An Orange widget that lets extract paratextual elements from a text"""
+    """An Orange widget that lets extract paratextual elements from a text"""
         
     #----------------------------------------------------------------------
     # Widget's metadata...
@@ -48,11 +48,16 @@ class Detect(widget.OWWidget):
     want_main_area = False
     
     autoSend = settings.Setting(False)
-    savedDict = settings.Setting({})
+    displayAdvancedSettings = settings.Setting(False)
+    
     selectedDictionaries = settings.Setting([])
     dictLabels = settings.Setting([])
     defaultDict = settings.Setting({})
-    displayAdvancedSettings = settings.Setting(False)
+    
+    selectedSubDictionaries = settings.Setting([])
+    subDictLabels = settings.Setting([])
+    subDict = settings.Setting({})
+    
 
     def __init__(self):
         super().__init__()
@@ -67,9 +72,9 @@ class Detect(widget.OWWidget):
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=None,
+            callback=self.getSubDictList,
             infoBoxAttribute="infoBox",
-            sendIfPreCallback=self.updateGUI,
+            sendIfPreCallback=None
         )
         
         # Advanced settings...
@@ -151,8 +156,6 @@ class Detect(widget.OWWidget):
             )
 
         #-------------------------------------------------------------------
-        
-        
         # Advanced settings box
         self.advancedBox = gui.widgetBox(
             widget=self.globalBox,
@@ -160,20 +163,71 @@ class Detect(widget.OWWidget):
             orientation="vertical",
         )
         
+        # CMC Radio Button
+        self.cmcButtons = gui.radioButtonsInBox(
+        widget=self.advancedBox,
+        master=self,
+        box=False,
+        btnLabels=['CMC', 'F2F'],
+        callback=None,
+        value='subDict',
+        )
+        
+        self.cmcButtons.setMinimumHeight(80)
+        self.cmcButtons.setMinimumWidth(40)
+        
+        self.subDictBox = gui.widgetBox(
+            widget=self.advancedBox,
+            box=False,
+            orientation="vertical",
+            )
+        
+        self.subDictListBox = gui.listBox(
+            widget=self.subDictBox,
+            master=self,
+            value="selectedSubDictionaries",
+            labels="subDictLabels",
+            callback=None,
+            tooltip="The list of sub dictionaries containing the regex to apply",
+            )
+
+        
+        """
         # Tabs...
         self.tabs = QTabWidget()
         self.cmcTab = QWidget()
         self.f2fTab = QWidget()
         self.tabs.addTab(self.cmcTab, "CMC")
         self.tabs.addTab(self.f2fTab, "F2F")  
-    
+        
+        #-------------------------------------------------------------------
         # CMC tab...
         cmcTabBox = QHBoxLayout()
-        cmcBox = gui.widgetBox(
+        self.cmcBox = gui.widgetBox(
             widget=self.cmcTab,
             orientation="horizontal",
             margin=5,
         )
+        
+        # CMC dict box
+        self.cmcDictBox = gui.widgetBox(
+            widget=self.cmcBox,
+            box=False,
+            orientation="vertical",
+            )
+        self.dictListBox = gui.listBox(
+            widget=self.cmcDictBox,
+            master=self,
+            value="selectedDictionaries",
+            labels="dictLabels",
+            callback=None,
+            tooltip="The list of dictionaries containing the regex to apply",
+            )
+        
+        self.cmcDictBox.setMinimumHeight(180)
+        self.cmcDictBox.setMinimumWidth(120)
+        self.dictListBox.setSelectionMode(2)
+        gui.separator(widget=self.dictBox, height=3)
         
         # F2F tab...
         f2fTabBox = QHBoxLayout()
@@ -182,6 +236,7 @@ class Detect(widget.OWWidget):
         orientation='horizontal',
         margin=5,
         )
+        """
         
         # GUI separator...
         gui.separator(widget=self.globalBox)
@@ -191,13 +246,19 @@ class Detect(widget.OWWidget):
         
         self.getDictList()
         
-        # self.sendButton.draw()
+        self.sendButton.draw()
         self.infoBox.draw()
         
-        
+    def print(self):
+        print(self.defaultDict)
 
     def showAdvancedTabs(self):
-        self.advancedBox.layout().addWidget(self.tabs)
+        
+        if self.displayAdvancedSettings:
+            self.advancedSettings.setVisible(True)
+            """self.advancedBox.layout().addWidget(self.tabs)"""
+        else:
+            self.advancedSettings.setVisible(False)
     
     def inputData(self, segmentation, language=None, mode=None):
         # Process incoming segmentation
@@ -212,7 +273,7 @@ class Detect(widget.OWWidget):
         )
         folderPath = os.path.join(actualFolderPath, "dictionaries")
         
-        
+        self.defaultDict = {}
         for file in os.listdir(folderPath):
             if file.endswith(".json"):
                 # Gets json file name and substracts .json extension
@@ -235,20 +296,29 @@ class Detect(widget.OWWidget):
         
         # Sorts defaultDict and display the right titles in the listBox            
         self.dictLabels = sorted(self.defaultDict.keys())
-        self.defaultDict = {}
+    
+    def getSubDictList(self):
+        self.subDictLabels = []
+        self.allSubDictLabels = []
+        for key in self.selectedDictionaries:
+            subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
+            for subLabel in subDictLabelsList:
+                self.allSubDictLabels.append(subLabel[0])
+        self.subDictLabels = list(dict.fromkeys(self.allSubDictLabels))
+        # print(self.subDictLabels)
+    
+    def getCmcList(self):        
+        self.cmcDict.update({fileName:''})
         
+        # Sorts cmcDict and display the right titles in the cmcListBox            
+        self.cmcLabels = sorted(self.cmcDict.keys())
+        self.cmcDict = {}
+    
     def selectAll(self):
         self.selectedDictionaries = list(range(len(self.dictLabels)))
-        
+  
     def deselectAll(self):
         self.selectedDictionaries = []
-    
-    # Update GUI state
-    def updateGUI(self):
-        if self.displayAdvancedSettings:
-            self.advancedSettings.setVisible(True)
-        else:
-            self.advancedSettings.setVisible(False)
     
     # Function for the detection of paralinguistic cues
     def parathon(self):
