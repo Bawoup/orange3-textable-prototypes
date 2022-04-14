@@ -68,6 +68,12 @@ Créer un widget pour Orange Textable (v3.1.11) permettant d'analyser un texte e
 
 * Permettre de choisir un ou plusieurs dictionnaires de regex à appliquer au texte.
 
+* Bouton Select All permet de sélectionner tous les éléments
+
+* Bouton Deselect All permet de désélectionner tous les éléments
+
+* Bouton Reload permet de mettre à jour s'il y a eu une modification dans la sélection ou désélection des dictionnaires
+
 * Baliser le texte selon les regexs appliquées.
 
 * Créer et émettre une segmentation avec les éléments reconnus.
