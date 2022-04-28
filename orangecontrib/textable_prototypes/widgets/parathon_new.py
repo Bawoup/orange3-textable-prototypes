@@ -22,7 +22,7 @@ from _textable.widgets.TextableUtils import (
 __version__ = "0.0.1"
 
 
-class Detect(widget.OWWidget):
+class Detect(OWTextableBaseWidget):
     """An Orange widget that lets extract paratextual elements from a text"""
         
     #----------------------------------------------------------------------
@@ -30,6 +30,7 @@ class Detect(widget.OWWidget):
     
     name = "Parathon"
     description = "Extract paratextual elements"
+    icon = "icons/parathon.svg"
     priority = 12
         
     #----------------------------------------------------------------------    
@@ -50,12 +51,16 @@ class Detect(widget.OWWidget):
     autoSend = settings.Setting(False)
     displayAdvancedSettings = settings.Setting(False)
     
+    
     selectedDictionaries = settings.Setting([])
     dictLabels = settings.Setting([])
     defaultDict = settings.Setting({})
     
     selectedSubDictionaries = settings.Setting([])
     subDictLabels = settings.Setting([])
+    subDictUniqueLabels = settings.Setting(set())
+    f2fDictLabels = settings.Setting([])
+    cmcDictLabels = settings.Setting([])
     subDict = settings.Setting({})
     
 
@@ -72,7 +77,7 @@ class Detect(widget.OWWidget):
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=self.getSubDictList,
+            callback=self.print,
             infoBoxAttribute="infoBox",
             sendIfPreCallback=None
         )
@@ -81,7 +86,7 @@ class Detect(widget.OWWidget):
         self.advancedSettings = AdvancedSettings(
             widget=self.controlArea,
             master=self,
-            callback=self.showAdvancedTabs,
+            callback=self.showAdvancedSettings,
         )
         
         self.advancedSettings.draw()
@@ -105,7 +110,7 @@ class Detect(widget.OWWidget):
             master=self,
             value="selectedDictionaries",
             labels="dictLabels",
-            callback=None,
+            callback=self.getSubDictList,
             tooltip="The list of dictionaries containing the regex to apply",
             )
         
@@ -146,11 +151,11 @@ class Detect(widget.OWWidget):
             orientation='horizontal',
         )
         
-        # Refresh button
+        # Reload button
         self.refreshDict = gui.button(
             widget=refreshBox,
             master=self,
-            label="Refresh",
+            label="Reload",
             callback=self.getDictList,
             tooltip="Refresh dictionary List",
             )
@@ -163,13 +168,13 @@ class Detect(widget.OWWidget):
             orientation="vertical",
         )
         
-        # CMC Radio Button
+        # Radio Button
         self.cmcButtons = gui.radioButtonsInBox(
         widget=self.advancedBox,
         master=self,
         box=False,
         btnLabels=['CMC', 'F2F'],
-        callback=None,
+        callback=self.processRadioButton,
         value='subDict',
         )
         
@@ -190,53 +195,8 @@ class Detect(widget.OWWidget):
             callback=None,
             tooltip="The list of sub dictionaries containing the regex to apply",
             )
-
         
-        """
-        # Tabs...
-        self.tabs = QTabWidget()
-        self.cmcTab = QWidget()
-        self.f2fTab = QWidget()
-        self.tabs.addTab(self.cmcTab, "CMC")
-        self.tabs.addTab(self.f2fTab, "F2F")  
-        
-        #-------------------------------------------------------------------
-        # CMC tab...
-        cmcTabBox = QHBoxLayout()
-        self.cmcBox = gui.widgetBox(
-            widget=self.cmcTab,
-            orientation="horizontal",
-            margin=5,
-        )
-        
-        # CMC dict box
-        self.cmcDictBox = gui.widgetBox(
-            widget=self.cmcBox,
-            box=False,
-            orientation="vertical",
-            )
-        self.dictListBox = gui.listBox(
-            widget=self.cmcDictBox,
-            master=self,
-            value="selectedDictionaries",
-            labels="dictLabels",
-            callback=None,
-            tooltip="The list of dictionaries containing the regex to apply",
-            )
-        
-        self.cmcDictBox.setMinimumHeight(180)
-        self.cmcDictBox.setMinimumWidth(120)
-        self.dictListBox.setSelectionMode(2)
-        gui.separator(widget=self.dictBox, height=3)
-        
-        # F2F tab...
-        f2fTabBox = QHBoxLayout()
-        f2fBox = gui.widgetBox(
-        widget=self.f2fTab,
-        orientation='horizontal',
-        margin=5,
-        )
-        """
+        self.subDictListBox.setSelectionMode(2)
         
         # GUI separator...
         gui.separator(widget=self.globalBox)
@@ -249,16 +209,13 @@ class Detect(widget.OWWidget):
         self.sendButton.draw()
         self.infoBox.draw()
         
+        self.advancedSettings.setVisible(self.displayAdvancedSettings)
+    
     def print(self):
-        print(self.defaultDict)
+        print(self.selectedSubDictionaries)
 
-    def showAdvancedTabs(self):
-        
-        if self.displayAdvancedSettings:
-            self.advancedSettings.setVisible(True)
-            """self.advancedBox.layout().addWidget(self.tabs)"""
-        else:
-            self.advancedSettings.setVisible(False)
+    def showAdvancedSettings(self):
+        self.advancedSettings.setVisible(self.displayAdvancedSettings)
     
     def inputData(self, segmentation, language=None, mode=None):
         # Process incoming segmentation
@@ -298,23 +255,52 @@ class Detect(widget.OWWidget):
         self.dictLabels = sorted(self.defaultDict.keys())
     
     def getSubDictList(self):
-        self.subDictLabels = []
-        self.allSubDictLabels = []
+        self.cmcDictLabels = []
+        self.f2fDictLabels = []
         for key in self.selectedDictionaries:
             subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
-            for subLabel in subDictLabelsList:
-                self.allSubDictLabels.append(subLabel[0])
-        self.subDictLabels = list(dict.fromkeys(self.allSubDictLabels))
-        # print(self.subDictLabels)
+            for subDictLabel in subDictLabelsList:
+                self.f2fDictLabels.append(subDictLabel[0])
+                self.cmcDictLabels.append(subDictLabel[1])
+        
     
-    def getCmcList(self):        
-        return
-
+    def processRadioButton(self):  
+        self.subDictLabels = []
+        tempList = []
+        self.subDictUniqueLabels = set()
+        if self.subDict == 0:
+            for elem in self.cmcDictLabels:
+                if ',' in elem:
+                    tempElems = elem.split(', ')
+                    tempList.append(tempElems)
+                else:
+                    tempList.append(elem)
+            self.subDictUniqueLabels.update(tempList)
+        elif self.subDict == 1:
+            for elem in self.f2fDictLabels:
+                if ',' in elem:
+                    tempElems = elem.split(', ')
+                    tempList.extend(tempElems)
+                else:
+                    tempList.append(elem)
+            self.subDictUniqueLabels.update(tempList)
+        else:
+            QMessageBox.warning(
+                        None,
+                        'Parathon',
+                        "Unvalid interaction.",
+                        QMessageBox.Ok
+                    )
+        self.subDictLabels = list(self.subDictUniqueLabels)
+        self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
+    
     def selectAll(self):
         self.selectedDictionaries = list(range(len(self.dictLabels)))
+        self.getSubDictList()
   
     def deselectAll(self):
         self.selectedDictionaries = []
+        self.getSubDictList()
     
     # Function for the detection of paralinguistic cues
     def parathon(self):
