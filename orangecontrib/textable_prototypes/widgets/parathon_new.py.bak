@@ -76,7 +76,7 @@ class Detect(OWTextableBaseWidget):
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=self.getSubDictList,
+            callback=self.print,
             infoBoxAttribute="infoBox",
             sendIfPreCallback=None
         )
@@ -85,7 +85,7 @@ class Detect(OWTextableBaseWidget):
         self.advancedSettings = AdvancedSettings(
             widget=self.controlArea,
             master=self,
-            callback=self.showAdvancedTabs,
+            callback=self.showAdvancedSettings,
         )
         
         self.advancedSettings.draw()
@@ -150,7 +150,7 @@ class Detect(OWTextableBaseWidget):
             orientation='horizontal',
         )
         
-        # Refresh button
+        # Reload button
         self.refreshDict = gui.button(
             widget=refreshBox,
             master=self,
@@ -209,9 +209,15 @@ class Detect(OWTextableBaseWidget):
         self.infoBox.draw()
         
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
+    
+    def print(self):
+        print(self.selectedSubDictionaries)
 
-    def showAdvancedTabs(self):
+    def showAdvancedSettings(self):
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
+        if self.displayAdvancedSettings.setVisible(False):
+            self.subDictLabels = []
+            self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
     
     def inputData(self, segmentation, language=None, mode=None):
         # Process incoming segmentation
@@ -288,19 +294,6 @@ class Detect(OWTextableBaseWidget):
                     )
         self.subDictLabels = list(self.subDictUniqueLabels)
         self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
-        
-        """if self.subDict == 0:
-            self.subDictLabels = list(dict.fromkeys(self.cmcDictLabels))
-        elif self.subDict == 1:
-            self.subDictLabels = list(dict.fromkeys(self.f2fDictLabels))
-            print(self.subDictLabels)
-        else:
-            QMessageBox.warning(
-                        None,
-                        'Parathon',
-                        "Unvalid interaction.",
-                        QMessageBox.Ok
-                    )"""
     
     def selectAll(self):
         self.selectedDictionaries = list(range(len(self.dictLabels)))

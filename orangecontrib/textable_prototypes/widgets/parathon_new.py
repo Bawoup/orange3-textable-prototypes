@@ -30,6 +30,7 @@ class Detect(OWTextableBaseWidget):
     
     name = "Parathon"
     description = "Extract paratextual elements"
+    icon = "icons/parathon.svg"
     priority = 12
         
     #----------------------------------------------------------------------    
@@ -76,7 +77,7 @@ class Detect(OWTextableBaseWidget):
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=self.getSubDictList,
+            callback=self.print,
             infoBoxAttribute="infoBox",
             sendIfPreCallback=None
         )
@@ -85,7 +86,7 @@ class Detect(OWTextableBaseWidget):
         self.advancedSettings = AdvancedSettings(
             widget=self.controlArea,
             master=self,
-            callback=self.showAdvancedTabs,
+            callback=self.showAdvancedSettings,
         )
         
         self.advancedSettings.draw()
@@ -150,7 +151,7 @@ class Detect(OWTextableBaseWidget):
             orientation='horizontal',
         )
         
-        # Refresh button
+        # Reload button
         self.refreshDict = gui.button(
             widget=refreshBox,
             master=self,
@@ -209,8 +210,11 @@ class Detect(OWTextableBaseWidget):
         self.infoBox.draw()
         
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
+    
+    def print(self):
+        print(self.selectedSubDictionaries)
 
-    def showAdvancedTabs(self):
+    def showAdvancedSettings(self):
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
     
     def inputData(self, segmentation, language=None, mode=None):
@@ -258,6 +262,7 @@ class Detect(OWTextableBaseWidget):
             for subDictLabel in subDictLabelsList:
                 self.f2fDictLabels.append(subDictLabel[0])
                 self.cmcDictLabels.append(subDictLabel[1])
+        
     
     def processRadioButton(self):  
         self.subDictLabels = []
