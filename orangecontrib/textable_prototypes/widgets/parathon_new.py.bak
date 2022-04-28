@@ -30,6 +30,7 @@ class Detect(OWTextableBaseWidget):
     
     name = "Parathon"
     description = "Extract paratextual elements"
+    icon = "icons/parathon.svg"
     priority = 12
         
     #----------------------------------------------------------------------    
@@ -215,9 +216,6 @@ class Detect(OWTextableBaseWidget):
 
     def showAdvancedSettings(self):
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
-        if self.displayAdvancedSettings.setVisible(False):
-            self.subDictLabels = []
-            self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
     
     def inputData(self, segmentation, language=None, mode=None):
         # Process incoming segmentation
@@ -264,12 +262,14 @@ class Detect(OWTextableBaseWidget):
             for subDictLabel in subDictLabelsList:
                 self.f2fDictLabels.append(subDictLabel[0])
                 self.cmcDictLabels.append(subDictLabel[1])
+        self.processRadioButton()
     
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
         self.subDictUniqueLabels = set()
-        if self.subDict == 0:
+
+        if self.subDict == 0 or not subDict:
             for elem in self.cmcDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
@@ -286,6 +286,7 @@ class Detect(OWTextableBaseWidget):
                     tempList.append(elem)
             self.subDictUniqueLabels.update(tempList)
         else:
+            print(self.subDict)
             QMessageBox.warning(
                         None,
                         'Parathon',

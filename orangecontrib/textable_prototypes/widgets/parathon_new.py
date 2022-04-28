@@ -262,13 +262,14 @@ class Detect(OWTextableBaseWidget):
             for subDictLabel in subDictLabelsList:
                 self.f2fDictLabels.append(subDictLabel[0])
                 self.cmcDictLabels.append(subDictLabel[1])
-        
+        self.processRadioButton()
     
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
         self.subDictUniqueLabels = set()
-        if self.subDict == 0:
+
+        if self.subDict == 0 or not self.subDict:
             for elem in self.cmcDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
@@ -285,6 +286,7 @@ class Detect(OWTextableBaseWidget):
                     tempList.append(elem)
             self.subDictUniqueLabels.update(tempList)
         else:
+            print(self.subDict)
             QMessageBox.warning(
                         None,
                         'Parathon',
