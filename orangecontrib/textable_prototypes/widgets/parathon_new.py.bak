@@ -222,6 +222,41 @@ class Detect(OWTextableBaseWidget):
         self.inputSegmentation = segmentation
         self.language = language
         self.mode = mode
+<<<<<<< HEAD
+        self.infoBox.inputChanged()
+        self.sendButton.sendIf()
+        
+    def sendData(self):
+        """Preprocess and send data"""
+        if not self.segmentation:
+            self.infoBox.setText(u'Widget needs input.', 'warning')
+            self.send('Segmentation', None, self)
+            return
+        if advancedSettings: # renommer selon le code
+            return
+        else :
+            return
+        
+        self.infoBox.setText(u"Processing, please wait...", "warning")
+        self.controlArea.setDisabled(True)
+        progressBar = ProgressBar(
+            self,
+            iterations=len(self.segmentation)
+        )
+        preprocessed_data, _ = Segmenter.recode( # renommer selon le code
+            self.segmentation,
+            copy_annotations=self.copyAnnotations, # to do renommer suivant le reste
+            progress_callback=progressBar.advance,
+        )
+        progressBar.finish()
+        self.controlArea.setDisabled(False)
+        message = u'%i segment@p sent to output.' % len(preprocessed_data)
+        message = pluralize(message, len(preprocessed_data))
+        self.infoBox.setText(message)
+        self.send('Segmentation', preprocessed_data, self)
+        self.sendButton.resetSettingsChangedFlag()
+=======
+>>>>>>> parent of d152cbd (Update parathon_new.py)
         
     def getDictList(self):        
         # Setting the path of the file and retrieving file dictionary names
@@ -269,7 +304,7 @@ class Detect(OWTextableBaseWidget):
         tempList = []
         self.subDictUniqueLabels = set()
 
-        if self.subDict == 0 or not subDict:
+        if self.subDict == 0 or not self.subDict:
             for elem in self.cmcDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')

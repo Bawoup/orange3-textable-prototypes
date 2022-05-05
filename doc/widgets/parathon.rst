@@ -8,10 +8,7 @@
 Parathon
 =======
 
-.. image:: figures/CHILDES.png
-
-Import data in XML format from the `CHILDES
-<https://childes.talkbank.org/data-xml/>`__ database.
+.. image:: figures/parathon.png
 
 Author
 ------
