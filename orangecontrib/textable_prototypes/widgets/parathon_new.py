@@ -275,8 +275,9 @@ class Detect(widget.OWWidget):
             self.send('Segmentation', None, self)
             return
         if advancedSettings: # renommer selon le code
-        
+            return
         else :
+            return
         
         self.infoBox.setText(u"Processing, please wait...", "warning")
         self.controlArea.setDisabled(True)
