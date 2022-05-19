@@ -6,29 +6,31 @@ __email__ = "rabet.zakari@gmail.ch"
 # Standard imports...
 import re, json, csv, os, platform, codecs, inspect
 
+
 from Orange.widgets import widget, gui, settings
 from Orange.widgets.widget import OWWidget, Input
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from enum import Enum
 from pathlib import Path
 from LTTL.Segmentation import Segmentation
+from LTTL.Segmenter import bypass
 from PyQt5.QtWidgets import QMessageBox
 from PyQt4.QtGui import QTabWidget, QWidget, QHBoxLayout
 from _textable.widgets.TextableUtils import (
     OWTextableBaseWidget, VersionedSettingsHandler,
-    JSONMessage, InfoBox, SendButton, AdvancedSettings
+    JSONMessage, InfoBox, SendButton, AdvancedSettings,
+    ProgressBar, pluralize
 )
 
 __version__ = "0.0.1"
 
 
-class Detect(OWTextableBaseWidget):
+class Parathon(OWTextableBaseWidget):
     """An Orange widget that lets extract paratextual elements from a text"""
         
     #----------------------------------------------------------------------
     # Widget's metadata...
-    
-    name = "Parathon"
+    name = "Parathon Joel"
     description = "Extract paratextual elements"
     icon = "icons/parathon.svg"
     priority = 12
@@ -36,7 +38,7 @@ class Detect(OWTextableBaseWidget):
     #----------------------------------------------------------------------    
     # Input and output channels...
     inputs = [
-        ('Segmentation', Segmentation, "inputData",)]
+        ('Segmentation', Segmentation, 'inputData',)]
     outputs = [('Segmented data', Segmentation)]
 
     #----------------------------------------------------------------------
@@ -72,12 +74,13 @@ class Detect(OWTextableBaseWidget):
         
         #-------------------------------------------------------------------
         # GUI...
-    
+
+        self.inputsegmentation = None
         self.infoBox = InfoBox(widget=self.controlArea)
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=self.print,
+            callback=self.sendData,
             infoBoxAttribute="infoBox",
             sendIfPreCallback=None
         )
@@ -217,9 +220,9 @@ class Detect(OWTextableBaseWidget):
     def showAdvancedSettings(self):
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
     
-    def inputData(self, segmentation, language=None, mode=None):
+    def inputData(self, Segmentation, language=None, mode=None):
         # Process incoming segmentation
-        self.inputSegmentation = segmentation
+        self.inputsegmentation = Segmentation
         self.language = language
         self.mode = mode
         self.infoBox.inputChanged()
@@ -227,12 +230,12 @@ class Detect(OWTextableBaseWidget):
     
     def sendData(self):
         # Preprocess and send data
-        if not self.segmentation:
+        if not self.inputsegmentation:
             self.infoBox.setText(u'Widget needs input.', 'warning')
-            self.send('Segmentation', None, self)
+            self.send('Segmented data', None, self)
             return
-        if advancedSettings: # renommer selon le code
-            return
+        # if advancedSettings: # renommer selon le code
+            # return
         else :
             
         
@@ -240,19 +243,16 @@ class Detect(OWTextableBaseWidget):
             self.controlArea.setDisabled(True)
             progressBar = ProgressBar(
                 self,
-                iterations=len(self.segmentation)
+                iterations=len(self.inputsegmentation)
             )
-            preprocessed_data, _ = Segmenter.recode( # renommer selon le code
-                self.segmentation,
-                copy_annotations=self.copyAnnotations, # to do renommer suivant le reste
-                progress_callback=progressBar.advance,
-            )
+            bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
+            progress_callback=progressBar.advance
             progressBar.finish()
             self.controlArea.setDisabled(False)
-            message = u'%i segment@p sent to output.' % len(preprocessed_data)
-            message = pluralize(message, len(preprocessed_data))
+            message = u'%i segment@p sent to output.' % len(bypassed_data)
+            message = pluralize(message, len(bypassed_data))
             self.infoBox.setText(message)
-            self.send('Segmentation', preprocessed_data, self)
+            self.send('Segmented data', bypassed_data, self)
             self.sendButton.resetSettingsChangedFlag()
             
         
@@ -263,7 +263,7 @@ class Detect(OWTextableBaseWidget):
         )
         folderPath = os.path.join(actualFolderPath, "dictionaries")
         
-        self.defaultDict = {}
+        self.defaultDict = {} # nom du fichier et contenu du fichier
         for file in os.listdir(folderPath):
             if file.endswith(".json"):
                 # Gets json file name and substracts .json extension
@@ -338,7 +338,7 @@ class Detect(OWTextableBaseWidget):
         self.getSubDictList()
     
     # Function for the detection of paralinguistic cues
-    def parathon(self):
+    def parathon_mode(self):
         os.chdir('.')
         with open('dictionaries/neutral.json', encoding='utf-8') as json_file:
             cue_dictionary = json.load(json_file)
@@ -428,6 +428,16 @@ class Detect(OWTextableBaseWidget):
         output_str_xml = output_str_xml + "\n</input>"
         xml_file.write(output_str_xml)
         xml_file.close()
+        
+    def setCaption(self, title):
+        if 'captionTitle' in dir(self):
+            changed = title != self.captionTitle
+            super().setCaption(title)
+            if changed:
+                self.sendButton.settingsChanged()
+        else:
+            super().setCaption(title)
+        
 
         
 if __name__ == "__main__":
@@ -436,7 +446,7 @@ if __name__ == "__main__":
     from LTTL.Input import Input
     
     myApplication = QApplication(sys.argv)
-    myWidget = Detect()
+    myWidget = Parathon()
     myWidget.inputData(Input('a simple example :)'))
     myWidget.show()
     myApplication.exec_()
