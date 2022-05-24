@@ -18,31 +18,24 @@ Zakari Rabet, Joël Huck, Lara Lambelet and Matthieu Perring.
 Signals
 -------
 
-Inputs: None
+Inputs:
+
+* ``Segmentation``
+
+  A Textable segmentation containing words.
 
 Outputs:
 
-* ``Files``
+* ``Segmented data``
 
-  Segmentation with a segment for each file in imported corpora
-
-* ``Utterances`` (optional)
-
-  Segmentation with a segment for each utterance in imported corpora
-
-* ``Words`` (optional)
-
-  Segmentation with a segment for each word in imported corpora
+  A Textable segmentation containing the same words annotated with the discovered paratextual elements.
 
 Description
 -----------
 
-This widget is designed to import one or more CHILDES corpora 
-in Orange Canvas. The corpora are retrieved from
-`<https://childes.talkbank.org/data-xml/>`__ and richly encoded in XML format. 
-The widget outputs at least one segmentation containing a segment for each file 
-in  each imported corpus. Segments in this segmentation have a variable number 
-of annotations (depending on what is available for each corpus): [1]_
+This widget takes a segmentation as input and applies....
+
+The widget outputs at [1]_
 
 =====================      =====
 key                        example value
