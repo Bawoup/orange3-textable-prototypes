@@ -103,28 +103,6 @@ The sub-elements include:
       - Emoji
     * - EMT
       - Emoticon
-      
-====================       =====
-Code                       Type
-=====================      =====
-*VSP*                      *Vocal spelling*
-*PUN*                      *Punctuation*
-*EMJ*                      *Emoji*
-*EMT*                      *Emoticon*
-=====================      =====
-
-**F2F**
-====================       =====
-Code                       Type
-=====================      =====
-*TK*                       *Tactile Kinesics*
-*VKG*                      *Visual Kinesics Gestures*
-*VKF*                      *Visual Kinesics Facial*
-*VS*                       *Vocalisation*
-*VQ*                       *Voice Quality*
-*A*                        *Artifact*
-*NoFTF*                    *No FTF equivalent*
-=====================      =====
 
 For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
 
