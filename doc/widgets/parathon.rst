@@ -89,7 +89,6 @@ One can select either one, and then opt for a more advanced analysis by selectin
 
 The sub-elements include:
 
-**F2F**
 +------------+-------------------------+
 | Code       | Type                    | 
 +============+=========================+
