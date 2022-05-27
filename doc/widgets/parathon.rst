@@ -37,7 +37,7 @@ Description
 
 The widget is based on a Python package created by Sorcha Walch that you can find at GitHub : https://github.com/sorchawalsh/parathon.git.
 
-This widget takes a segmentation as input and applies dictionaries. The dictionaries are lists of regexes. 
+This widget takes a segmentation as input and applies dictionaries. The dictionaries are stored in default_dict as regex dictionaries. The files are in JSON format.
 The widget annotates the input text and extract the paralinguistic elements specific to digital communication, while relating them to the paralinguistic features present in face-to-face communication.
 
 Interface
@@ -102,7 +102,6 @@ The sub-elements include:
 +------------+-------------------------+
 | EMT        | Emoticon                | 
 +------------+-------------------------+ 
-
 
 **F2F**
 
