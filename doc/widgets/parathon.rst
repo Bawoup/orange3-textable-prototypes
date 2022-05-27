@@ -11,8 +11,6 @@ Parathon
 .. image:: figures/parathon_logo.png
     :alt: First look at Parathon widget
     :align: center 
-    :height: 200px
-    :width: 200 px
 
 Author
 ------
