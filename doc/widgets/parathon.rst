@@ -92,7 +92,7 @@ One can select either one, and then opt for a more advanced analysis by selectin
 The sub-elements include:
 
 **CMC**
-====================      =====
+====================       =====
 Code                       Type
 =====================      =====
 *VSP*                      *Vocal spelling*
@@ -102,7 +102,7 @@ Code                       Type
 =====================      =====
 
 **F2F**
-====================      =====
+====================       =====
 Code                       Type
 =====================      =====
 *TK*                       *Tactile Kinesics*
