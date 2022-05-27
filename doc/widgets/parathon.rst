@@ -35,7 +35,7 @@ Outputs:
 Description
 -----------
 
-The widget is based on a Python package created by Sorcha Walch that you can find at GitHub : https://github.com/sorchawalsh/parathon.git.
+The widget is based on a Python package created by Sorcha Walsh that you can find at GitHub : https://github.com/sorchawalsh/parathon.git.
 
 This widget takes a segmentation as input and applies dictionaries. The dictionaries are stored in default_dict as regex dictionaries. The files are in JSON format.
 The widget annotates the input text and extract the paralinguistic elements specific to digital communication, while relating them to the paralinguistic features present in face-to-face communication.
@@ -175,8 +175,11 @@ Errors
     An error prevented the widget from connecting to another widget.
 
 *"ERROR: language file could not be found. Analysing with neutral dictionary.*
-    An error has prevented the widget to access the language of the input text. The neutral dictionary is chosen automatically.
+    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
+    respectively the langage one. The neutral dictionary is chosen automatically.
 
 *ERROR: mode dictionary could not be found. Analysing with neutral dictionary.*
-    An error has prevented the widget to work because no dictionary has been selected, so the neutral dictionary is used. 
+    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
+    respectively the mode one. The neutral dictionary is chosen automatically.
 
+The last two errors are not really used but are extended errors that can be used in future modifications using Sorcha Walsh's code.
