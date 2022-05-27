@@ -11,7 +11,7 @@ Parathon
 .. image:: figures/parathon_logo.png
     :alt: First look at Parathon widget
     :align: center 
-    :height: 100px
+    :height: 200px
     :width: 200 px
 
 Author
@@ -114,7 +114,7 @@ Code                       Type
 *NoFTF*                    *No FTF equivalent*
 =====================      =====
 
-For more information, check the rapport_final.pdf that can be find at the following adress:https://github.com/sorchawalsh/parathon.git.
+For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
 
 Figure 4, shows exemple of **CMC** sub-elements for the **neutral** dictionary.
 
