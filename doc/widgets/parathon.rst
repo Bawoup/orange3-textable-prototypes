@@ -89,40 +89,24 @@ One can select either one, and then opt for a more advanced analysis by selectin
 
 The sub-elements include:
 
-.. list-table:: CMC
-    :widths: 25 25 50
-    :header-rows: 1
-
-    * - Code
-      - Type
-    * - VSP
-      - Vocal spelling
-    * - PUN
-      - Punctuation
-    * - EMJ
-      - Emoji
-    * - EMT
-      - Emoticon
-
 **F2F**
-+------------+--------------------+
-| Code  | Type                    | 
-+============+====================+
-| TK    | Tactile Kinesics        | 
-+---------------------------------+
-| VKG   | Visual Kinesics Gestures| 
-+---------------------------------+ 
-| VKF   | Visual Kinesics Facial  | 
-+---------------------------------+
-| VS    | Vocalisation            | 
-+---------------------------------+ 
-| VQ    | Voice Quality           | 
-+---------------------------------+
-| A     | Artifact                | 
-+---------------------------------+
-| NoFTF | No FTF equivalent       | 
-+---------------------------------+
-
++------------+-------------------------+
+| Code       | Type                    | 
++============+=========================+
+| TK         | Tactile Kinesics        | 
++------------+-------------------------+
+| VKG        | Visual Kinesics Gestures| 
++------------+-------------------------+ 
+| VKF        | Visual Kinesics Facial  | 
++------------+-------------------------+
+| VS         | Vocalisation            | 
++------------+-------------------------+ 
+| VQ         | Voice Quality           | 
++------------+-------------------------+
+| A          | Artifact                | 
++------------+-------------------------+
+| NoFTF      | No FTF equivalent       | 
++------------+-------------------------+
 
 For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
 
