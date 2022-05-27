@@ -174,7 +174,7 @@ Errors
 *Unvalid interaction.*
     An error prevented the widget from connecting to another widget.
 
-*"ERROR: language file could not be found. Analysing with neutral dictionary.*
+*ERROR: language file could not be found. Analysing with neutral dictionary.*
     An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
     respectively the langage one. The neutral dictionary is chosen automatically.
 
