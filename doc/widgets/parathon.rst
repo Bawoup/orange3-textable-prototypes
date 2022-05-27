@@ -89,7 +89,21 @@ One can select either one, and then opt for a more advanced analysis by selectin
 
 The sub-elements include:
 
-**CMC**
+.. list-table:: CMC
+    :widths: 25 25 50
+    :header-rows: 1
+
+    * - Code
+      - Type
+    * - VSP
+      - Vocal spelling
+    * - PUN
+      - Punctuation
+    * - EMJ
+      - Emoji
+    * - EMT
+      - Emoticon
+      
 ====================       =====
 Code                       Type
 =====================      =====
