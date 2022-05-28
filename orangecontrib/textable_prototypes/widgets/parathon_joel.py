@@ -30,7 +30,7 @@ class Parathon(OWTextableBaseWidget):
         
     #----------------------------------------------------------------------
     # Widget's metadata...
-    name = "Parathon Joel"
+    name = "Parathon"
     description = "Extract paratextual elements"
     icon = "icons/parathon.svg"
     priority = 12
@@ -167,7 +167,7 @@ class Parathon(OWTextableBaseWidget):
         # Advanced settings box
         self.advancedBox = gui.widgetBox(
             widget=self.globalBox,
-            box="Advanced Settings",
+            box="Selection Mode",
             orientation="vertical",
         )
         
