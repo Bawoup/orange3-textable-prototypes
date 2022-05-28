@@ -117,4 +117,4 @@ TODO
 
 4. Infrastructure
 =================
-Le projet est disponible sur GitHub à l'adresse: TODO
+Le projet est disponible sur GitHub à l'adresse: https://github.com/Bawoup/orange3-textable-prototypes.git 

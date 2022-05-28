@@ -8,12 +8,14 @@
 Parathon
 =======
 
-.. image:: figures/parathon.png
+.. image:: figures/parathon_logo.png
+    :alt: First look at Parathon widget
+    :align: center 
 
 Author
 ------
 
-Zakari Rabet, Joël Huck, Lara Lambelet and Matthieu Perring.
+Zakari Rabet, Joël Huck, Lara Lambelet and Mathieu Perring.
 
 Signals
 -------
@@ -33,189 +35,151 @@ Outputs:
 Description
 -----------
 
-This widget takes a segmentation as input and applies....
+The widget is based on a Python package created by Sorcha Walsh that you can find at GitHub : https://github.com/sorchawalsh/parathon.git.
 
-The widget outputs at [1]_
-
-=====================      =====
-key                        example value
-=====================      =====
-*corpus*                   *Geneva*
-*file_path*                *Geneva/020107.xml*
-*lang*                     *fra*
-*pid*                      *11312/c-00028161-1*
-*target_child_id*          *CHI*
-*target_child_age*         *P2Y01M07D*
-*target_child_days*        *757*
-*target_child_months*      *25*
-*target_child_years*       *2*
-=====================      =====
-
-Optionally, the output may also include two more segmentations, into utterances
-and into words. Both inherit the annotations above. The utterance segmentation
-adds two extra annotations:
-
-==========  ===============
-key              example value
-==========  ===============
-*uID*            *u0*
-*who*            *CHI*
-==========  ===============
-
-The word segmentation inherits all previous annotations, and adds a variable 
-number of annotations (depending on the information available in the data), 
-namely at most: 
-
-===========   =========
-key           example value
-===========   =========
-*head*        *1*
-*index*       *0*
-*pos*         *part*
-*prefixes*    *dé*
-*relation*    *OBJ*
-*stem*        *faire*
-*suffixes*    *PP&m*
-===========   =========
-
+This widget takes a segmentation as input and applies dictionaries. The dictionaries are stored in default_dict as regex dictionaries. The files are in JSON format.
+The widget annotates the input text and extract the paralinguistic elements specific to digital communication, while relating them to the paralinguistic features present in face-to-face communication.
 
 Interface
 ~~~~~~~~~
 
-User controls are divided into three main sections (see :ref:`figure 1 
-<childes_fig1>` below): **Browse database**, **Selection**, and **Options**.
+User controls are divided into three main sections: **Dictionaries**, **Advanced settings**, and **Selection Mode**.
 
-.. _childes_fig1:
+.. _parathon_fig1:
 
-.. figure:: figures/childes_interface.png
+.. figure:: figures/parathon_fig1.png
     :align: center
-    :alt: Interface of the CHILDES widget
+    :scale: 50 %
 
-    Figure 1: **CHILDES** widget interface.
+If no input has been connected, the parathon widget cannot work. It sends an error, **Widget needs input**.
 
-The **Browse database** section allows the user to navigate the XML section of
-the CHILDES database (`<https://childes.talkbank.org/data-xml/>`__) and select
-the desired corpora. It is organized like a file tree, starting from a root 
-folder (denoted as "/"), and each folder may contain any number of subfolders
-and/or zipped archives.
+.. _parathon_fig2:
 
-To view the contents of a folder, either double-click it or select it and
-click **Open**. Button **Back** brings you back to the parent folder, and 
-**Home** to the root folder.
+.. figure:: figures/parathon_fig2.png
+    :align: center
+    :scale: 50 %
 
-**Add to selection** adds the highlighted archive(s) to your selection, and so 
-does double-clicking an archive. If a folder is highlighted, clicking **Add to 
-selection** results in adding *all* the archives contained in this folder and, 
-recursively, in contained subfolders (so possibly a lot of archives), to your 
-selection. Note that multiple archives/folders may be highlighted (using 
-control/command-click or shift-click) and added at once to your selection.
+After connecting a Textable widget as an input, the user can start using the parathon widget.
+The minimal window, presents the **Dictionaries** section, in which the user can select one or 
+more dictionaries found in json files. These dictionaries are composed of regex lists.
 
-When the current folder is the root folder ("/"), the **Home** button is 
-replaced with **Refresh**. Clicking **Refresh** instructs the widget to connect
-to the CHILDES website and update its own configuration to take into account
-possible changes (usually additions) to the database. This operation may take
-a few minutes and is only useful when the online database has changed; it has 
-the additional consequence that it cancels previous selections.
+**Select All** selects all dictionaries. **Deselect All** deletes all previously selected dictionaries.
+**Reload** allows the user to update the selection that will be processed if there are any changes before starting the processing.
+**Send** initiates the widget process and sends the result to the output. The result is a segmentation. A message of confirmation appears, **i segment sent to output**.
+In this minimal window, the checkbox to go to **Advanced settings** section is displayed. 
 
-The **Selection** section lists all corpora that are marked for import. Note
-that only a single copy of any given corpora can be added to this list 
-(attempting to add it twice will have no effect).
+.. _parathon_fig3:
 
-**Remove from selection** removes the highlighted archive(s) from your 
-selection, and so does double-clicking an archive. Multiple archives may be 
-highlighted (using control/command-click or shift-click) and removed at once 
-from your selection. **Clear selection** removes *all* archives from your 
-selection.
+.. figure:: figures/parathon_fig3.png
+    :align: center
+    :scale: 50 %
 
-The **Options** section enables the user to select whether optional 
-segmentations (utterances and words) should be extracted and sent in output. It 
-also offers two options for fine-tuning the word extraction process: ticking 
-**Words stem includes: POS-tag** prepends a word's *stem* annotation with its 
-part-of-speech tag, which can be useful to separate homophonous stems such
-as *v|walk* and *n|walk*; **Words stem includes: prefixes** prepends stems
-with prefixes, if any, which is necessary if you want to treat e.g. *write*
-and *re#write* as separate stems.
+This figure shows how it appears if the user selected **Send automatically**.
 
-The **Info** section informs the user about the status of the widget and 
-indicates the number of segments and characters in the output segmentation, or 
-the reasons why no segmentation is emitted (no corpus selected, connection 
-issues, etc.).
+.. _parathon_fig4:
 
-The **Send** button triggers the retrieval and emission of one or more 
-segmentations to the output connection(s). When it is selected, the **Send 
-automatically** checkbox disables the button and the widget attempts to 
-automatically emit a segmentation at every modification of its interface.
+.. figure:: figures/parathon_fig4.png
+    :align: center
+    :scale: 50 %
 
-Caveat about word extraction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Advanced settings** section has been selected. On the left part of the section, one can select one or more dictionaries. 
+When a dictionary is selected, the part on the right, i.e. the **Selection Mode** section changes according to the selected dictionary.
+**Selection Mode** presents the two paralinguistic categories **CMC** and **F2**. **CMC** means Computer-Mediated Communication and **F2F** means Face-to-Face.
+One can select either one, and then opt for a more advanced analysis by selecting sub-elements within each one that depend on each dictionary.
 
-Extracting a word segmentation based on CHILDES XML has proved a challenging
-task and should be considered a beta feature at this point in the development of
-the widget. The extraction strategy that has been implemented is based on the
-author's perception of the most important features of the `CHILDES XML schema
-<https://talkbank.org/software/xsddoc/>`_ and has only be tested thus far on a
-limited fraction of the CHILDES corpora. This strategy can be summarized as 
-follows:
+The sub-elements include:
 
-#. substitute replacements (if any) for words, e.g. *lemme [: let me]*
-#. move *<gra>* elements inside adjacent non-compound words (*<mc>*)
-#. extract all words (*<w>*)
-#. for each non-compound word (*<mw>*) in each (possibly compound) word:
+**CMC**
 
-   #. create a new word segment
-   #. extract this non-compound word's attributes and assign them as annotations to the new word segment
-   
-Word attribute extraction operates as follows:
++------------+-------------------------+
+| Code       | Type                    | 
++============+=========================+
+| VSP        | Vocal spelling          | 
++------------+-------------------------+
+| PUN        | Puncutation             | 
++------------+-------------------------+ 
+| EMJ        | Emoji                   | 
++------------+-------------------------+
+| EMT        | Emoticon                | 
++------------+-------------------------+ 
 
-- if available, syntactic category and subcategories are joined with colons (*:*) to form the value of annotation *pos* 
-- if available, prefixes (*<mpfx>*) are joined with sharp (*#*) to form the value of annotation *prefixes* 
-- if available, suffixes (*<mk>*) are joined with *&*, *-* or *:* to form the value of annotation *suffixes* 
-- if available, *stem* attribute forms the value of annotation *stem* (possibly including *pos* and *prefixes*, depending on selected options)
-- if available, *index*, *head* and *relation* attributes of *<gra>* elements are extracted to form corresponding annotations.
- 
+**F2F**
+
++------------+-------------------------+
+| Code       | Type                    | 
++============+=========================+
+| TK         | Tactile Kinesics        | 
++------------+-------------------------+
+| VKG        | Visual Kinesics Gestures| 
++------------+-------------------------+ 
+| VKF        | Visual Kinesics Facial  | 
++------------+-------------------------+
+| VS         | Vocalisation            | 
++------------+-------------------------+ 
+| VQ         | Voice Quality           | 
++------------+-------------------------+
+| A          | Artifact                | 
++------------+-------------------------+
+| NoFTF      | No FTF equivalent       | 
++------------+-------------------------+
+
+For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
+
+Figure 4, shows exemple of **CMC** sub-elements for the **neutral** dictionary.
+
+.. _parathon_fig5:
+
+.. figure:: figures/parathon_fig5.png
+    :align: center
+    :scale: 50 %
+
+Figure 5, shows exemple of **F2F** sub-elements for the **neutral** dictionary.
+In this case, all sub-elements are selected. This does not have to be the case. 
+The **Deselect All**, **Select All** and **Reload** commands also work in the **Selection Mode** section.
+If the user chooses a category, for example, **CMC**, and selects a few sub-elements, the result will only show 
+the elements of that choice. It is only possible to select one category and not both.
+If one wants both categories, then one should stay in the minimal version where one chooses only the dictionaries. 
 
 Messages
---------
+---------
 
 Information
 ~~~~~~~~~~~
 
-*<n> files, <m> utterances and <l> words sent to output.*
+*<n> segments sent to output.*
     This confirms that the widget has operated properly.
-
 
 Warnings
 ~~~~~~~~
 
-*Settings were changed, please click 'Send' when ready.*
-    Settings have changed but the **Send automatically** checkbox
+*Input has changed, please click 'Send' when ready.*
+    Input has changed but the **Send automatically** checkbox
     has not been selected, so the user is prompted to click the **Send**
     button (or equivalently check the box) in order for computation and data
     emission to proceed.
 
-*Please add a corpus to the selection.*
-    The widget instance is not able to emit data to output because no corpus
-    has been added to the selection.
+*Widget needs input.*
+    The widget instance is unable to process because it has no input.
 
-*Connecting to CHILDES website, please wait...*
-    The widget instance is in the process of connecting with the CHILDES website
-    in order to recreate the database cache.
+*Processing, please wait...*
+   The data has been sent. The widget is doing its processing to output the result.
 
 
 Errors
 ~~~~~~
 
-*Couldn't download corpus %s from CHILDES website.*
-    An error has prevented the widget from downloading the indicated corpus
-    from the CHILDES website.
+*Couldn't open file.*
+    An error has prevented the widget to open to uploaded file.
 
-*Error while attempting to scrape the CHILDES website.*
-    An error has prevented the widget to scrape the data from the
-    CHILDES website while recreating the database cache.
+*Unvalid interaction.*
+    An error prevented the widget from connecting to another widget.
 
-*Couldn't save database to disk.*
-    An error has prevented the widget from saving the database cache to disk 
-    after recreating the database cache.
-    
+*ERROR: language file could not be found. Analysing with neutral dictionary.*
+    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
+    respectively the langage one. The neutral dictionary is chosen automatically.
 
-.. [1] The user is referred to the `CHAT transcription format documentation <https://talkbank.org/manuals/CHAT.html>`_ for the meaning and possible values of the numerous annotations extracted by the widget.
+*ERROR: mode dictionary could not be found. Analysing with neutral dictionary.*
+    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
+    respectively the mode one. The neutral dictionary is chosen automatically.
+
+The last two errors are not really used but are extended errors that can be used in future modifications using Sorcha Walsh's code.
