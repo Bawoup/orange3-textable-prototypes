@@ -274,17 +274,11 @@ class Parathon(OWTextableBaseWidget):
                         regex2 = re.escape(element)+r"\Z"
                         if re.search(regex1, str(data[key][index])) or re.search(regex2, str(data[key][index])):
                             cue_dictionary[key] = data[key]
-                
-        #print(len(cue_dictionary))
 
-        #file = open(file, "r", encoding="utf8")
-        #txt = file.read()
         txt = file
-
         # Here we split the text into tokens. Emojis count as tokens. Some punctuation
         # is included as a word character so we may take into account,
         # for example, *corrections and _whatsapp formatting_.
-
         split = re.findall(r"[\w'*_~]+|[.,!?;:)\*]+|\s+|[\U00010000-\U0010ffff]", txt, flags=re.UNICODE)
         position = 0
         output = list()
@@ -335,7 +329,6 @@ class Parathon(OWTextableBaseWidget):
             output_str_xml = output_str_xml + token
         output_str_xml = output_str_xml + "\n</input>"
 
-
         print(output_str_xml)
         return output_str_xml
     
@@ -357,7 +350,6 @@ class Parathon(OWTextableBaseWidget):
         # Determine ici le mode de sélection coché
         if isinstance(self.subDict, int) and AS_SelectionStatus==True:
             selectedMode = ['CMC', 'F2F'][self.subDict]
-            print(selectedMode + " is selected")
             # Assigner les valeurs de CMTs ou FTFs à des listes
             if selectedMode == "CMC":
                 cmcList = selectedSubDictsLabels
@@ -366,14 +358,12 @@ class Parathon(OWTextableBaseWidget):
             if selectedMode == "F2F":
                 cmcList = []
                 ftfList = selectedSubDictsLabels
-            print(cmcList, ftfList)
         else:
             cmcList = []
             ftfList = []
             print(cmcList, ftfList)
             print("Neither CMC or F2F are selected")
 
-            
         # Preprocess and send data
         if not self.inputsegmentation:
             self.infoBox.setText(u'Widget needs input.', 'warning')
@@ -382,44 +372,26 @@ class Parathon(OWTextableBaseWidget):
         # if advancedSettings: # renommer selon le code
             # return
         else :
-            
-        
             self.infoBox.setText(u"Processing, please wait...", "warning")
             self.controlArea.setDisabled(True)
             progressBar = ProgressBar(
                 self,
                 iterations=len(self.inputsegmentation)
             )
-            bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
-
-
-            textInput = self.inputsegmentation.get_data(0)
-            print(textInput)
-            print(selectedDictsLabels)
-            print(ftfList)
-            print(cmcList)
-
-            self.parathonFunction(textInput, selectedDictsLabels, ftfList, cmcList)
             
+            # On va chercher l'input et on lui applique la fonction parathon
+            textInput = self.inputsegmentation.get_data(0)
+            parathonResult = self.parathonFunction(textInput, selectedDictsLabels, ftfList, cmcList)
 
-
-            #print(self.inputsegmentation)
-            #print(bypassed_data)
-            #print(self.inputsegmentation.get_data(0))
-            #inputtext = self.inputsegmentation.get_data(0) + " plus another simple example"
-
-            #testbypassed_data = Input(inputtext)
-            #print(testbypassed_data)
-            #bypassed_data = "hello"
-            #print(bypassed_data)
-
+            # Remplacer cette ligne de code par celle qui transforme parathonResult en segmentation (?) pour être envoyé comme output
+            bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
+           
             progress_callback=progressBar.advance
             progressBar.finish()
             self.controlArea.setDisabled(False)
             message = u'%i segment@p sent to output.' % len(bypassed_data)
             message = pluralize(message, len(bypassed_data))
             self.infoBox.setText(message)
-            #self.send('Segmented data', bypassed_data, self)
             self.send('Segmented data', bypassed_data, self)
             self.sendButton.resetSettingsChangedFlag()
             
