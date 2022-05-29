@@ -5,16 +5,14 @@ __email__ = "rabet.zakari@gmail.ch"
 
 # Standard imports...
 import re, json, csv, os, platform, codecs, inspect
-from xml.dom import InuseAttributeErr
 
 
 from Orange.widgets import widget, gui, settings
-from Orange.widgets.widget import OWWidget, Input, Output
+from Orange.widgets.widget import OWWidget, Input
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from enum import Enum
 from pathlib import Path
 from LTTL.Segmentation import Segmentation
-from LTTL.Segment import Segment
 from LTTL.Segmenter import bypass
 from PyQt5.QtWidgets import QMessageBox
 from PyQt4.QtGui import QTabWidget, QWidget, QHBoxLayout
@@ -32,7 +30,7 @@ class Parathon(OWTextableBaseWidget):
         
     #----------------------------------------------------------------------
     # Widget's metadata...
-    name = "Parathon Matthieu"
+    name = "Parathon MatthieuV2"
     description = "Extract paratextual elements"
     icon = "icons/parathon.svg"
     priority = 12
@@ -379,13 +377,12 @@ class Parathon(OWTextableBaseWidget):
                 iterations=len(self.inputsegmentation)
             )
             
-            # On va chercher l'input et on lui applique la fonction parathon
+            # On va chercher l'input et on lui applique la fonction parathon, on dirait que le fait d'invoquer cette fonction empêche le segment d'être envoyé au display dans orange
             textInput = self.inputsegmentation.get_data(0)
             parathonResult = self.parathonFunction(textInput, selectedDictsLabels, ftfList, cmcList)
 
             # Remplacer cette ligne de code par celle qui transforme parathonResult en segmentation (?) pour être envoyé comme output
             bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
-           
             progress_callback=progressBar.advance
             progressBar.finish()
             self.controlArea.setDisabled(False)
@@ -496,7 +493,8 @@ if __name__ == "__main__":
     
     myApplication = QApplication(sys.argv)
     myWidget = Parathon()
-    myWidget.inputData(Input('03/02/2021, 19:30 - sorcha: *LMAO'))
+    #myWidget.inputData(Input('03/02/2021, 19:30 - sorcha: *LMAO'))
+    myWidget.inputData(Input('a simple example :)'))
     myWidget.show()
     myApplication.exec_()
     myWidget.saveSettings()

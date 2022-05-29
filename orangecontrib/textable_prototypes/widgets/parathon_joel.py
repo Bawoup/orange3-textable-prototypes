@@ -30,7 +30,7 @@ class Parathon(OWTextableBaseWidget):
         
     #----------------------------------------------------------------------
     # Widget's metadata...
-    name = "Parathon"
+    name = "Parathon Joel"
     description = "Extract paratextual elements"
     icon = "icons/parathon.svg"
     priority = 12
