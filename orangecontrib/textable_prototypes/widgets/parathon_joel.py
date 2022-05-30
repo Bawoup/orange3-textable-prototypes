@@ -288,8 +288,10 @@ class Parathon(OWTextableBaseWidget):
         self.dictLabels = sorted(self.defaultDict.keys())
     
     def getSubDictList(self):
+        # Sets lists to contain sub labels
         self.cmcDictLabels = []
         self.f2fDictLabels = []
+        # Gets all sub labels and stoxks them in the right list
         for key in self.selectedDictionaries:
             subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
             for subDictLabel in subDictLabelsList:
@@ -297,7 +299,9 @@ class Parathon(OWTextableBaseWidget):
                 self.cmcDictLabels.append(subDictLabel[1])
         self.processRadioButton()
     
-    def processRadioButton(self):  
+    
+    # Displays the right sub labels according to the selected dictionnaries
+    def processRadioButton(self):
         self.subDictLabels = []
         tempList = []
         self.subDictUniqueLabels = set()
