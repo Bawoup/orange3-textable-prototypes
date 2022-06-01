@@ -8,7 +8,7 @@ import re, json, csv, os, platform, codecs, inspect
 
 
 from Orange.widgets import widget, gui, settings
-from Orange.widgets.widget import OWWidget, Input
+from Orange.widgets.widget import OWWidget, Input, Output
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from enum import Enum
 from pathlib import Path
@@ -76,6 +76,7 @@ class Parathon(OWTextableBaseWidget):
         # GUI...
 
         self.inputsegmentation = None
+        self.newInput = None
         self.infoBox = InfoBox(widget=self.controlArea)
         self.sendButton = SendButton(
             widget=self.controlArea,
@@ -230,12 +231,14 @@ class Parathon(OWTextableBaseWidget):
         
 
     # Function for the detection of paralinguistic cues
-    def parathonFunction(self, file, dicts, ftfList, cmcList):
+    def parathonFunction(self, file, AS_SelectionStatus,dicts, ftfList, cmcList):
    
         # Dictionnaire où sera stocké les regex à utiliser selon les choix de CMC ou FTF
         cue_dictionary = {}
 
-        if not ftfList and not cmcList:
+        # Si les deux listes sont vides alors cela veut dire que 
+        #if not ftfList and not cmcList:
+        if AS_SelectionStatus == False or AS_SelectionStatus and not cmcList and not ftfList:
             # Looper chaque dictionnaire choisi
             for dict in dicts:
                 #Ouvrir le dictionnaire qui est sous format json
@@ -243,11 +246,12 @@ class Parathon(OWTextableBaseWidget):
                 data = json.load(f)
                 # Aller chercher les keys du dictionnaire
                 keys = list(data)
-                print(len(keys))
+                print("Number of keys " + str(len(keys)))
                 # Combiner ces dictionnaires dans cue_dictionary
                 for key in keys:
                     cue_dictionary[key] = data[key]
-        else:
+                print(len(list(cue_dictionary)))
+        elif AS_SelectionStatus==True and ftfList or cmcList:
             # Looper chaque dictionnaire choisi
             for dict in dicts:
                 #Ouvrir le dictionnaire qui est sous format json
@@ -257,11 +261,9 @@ class Parathon(OWTextableBaseWidget):
                 keys = list(data)
                 # On va chercher la liste qui n'est pas vide (FTF ou CMC) et on déclare la variable selection et la variable index
                 if ftfList:
-                    print("FTF selected")
                     selection = ftfList
                     index = 0
                 if cmcList:
-                    print("CMC selected")
                     selection = cmcList
                     index = 1
             # Une fois ces deux variables déclarées on utilise leur valeur
@@ -274,6 +276,7 @@ class Parathon(OWTextableBaseWidget):
                             cue_dictionary[key] = data[key]
 
         txt = file
+
         # Here we split the text into tokens. Emojis count as tokens. Some punctuation
         # is included as a word character so we may take into account,
         # for example, *corrections and _whatsapp formatting_.
@@ -334,15 +337,16 @@ class Parathon(OWTextableBaseWidget):
         
         # True si advanced setting coché et False sinon
         AS_SelectionStatus = self.displayAdvancedSettings
-        print("Advanced Settings is selected : " + str(AS_SelectionStatus))
+        print("\nAdvanced Settings is selected : " + str(AS_SelectionStatus))
 
         # Dictionnaires sélectionnés
         selectedDictsLabels = [self.dictLabels[item] for item in self.selectedDictionaries]
-        print(selectedDictsLabels)
+        print("Selected dictionnaries " + str(selectedDictsLabels))
 
         # Sous-Dictionnaires (les CMTs ou FTFs) sélectionnés
-        selectedSubDictsLabels = [list(self.subDictUniqueLabels)[item] for item in self.selectedSubDictionaries]
-        print(selectedSubDictsLabels)
+        if AS_SelectionStatus == True:
+            selectedSubDictsLabels = [list(self.subDictUniqueLabels)[item] for item in self.selectedSubDictionaries]
+            print("Selected subDicts = " + str(selectedSubDictsLabels))
 
 
         # Determine ici le mode de sélection coché
@@ -359,7 +363,7 @@ class Parathon(OWTextableBaseWidget):
         else:
             cmcList = []
             ftfList = []
-            print(cmcList, ftfList)
+            print("The selected sublists " + str(cmcList), str(ftfList))
             print("Neither CMC or F2F are selected")
 
         # Preprocess and send data
@@ -377,19 +381,28 @@ class Parathon(OWTextableBaseWidget):
                 iterations=len(self.inputsegmentation)
             )
             
-            # On va chercher l'input et on lui applique la fonction parathon, on dirait que le fait d'invoquer cette fonction empêche le segment d'être envoyé au display dans orange
+            # On va chercher l'input et on lui applique la fonction parathon
             textInput = self.inputsegmentation.get_data(0)
-            parathonResult = self.parathonFunction(textInput, selectedDictsLabels, ftfList, cmcList)
+            parathonResult = self.parathonFunction(textInput, AS_SelectionStatus,selectedDictsLabels, ftfList, cmcList)
 
             # Remplacer cette ligne de code par celle qui transforme parathonResult en segmentation (?) pour être envoyé comme output
-            bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
+            #bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
+
             progress_callback=progressBar.advance
-            progressBar.finish()
+            progressBar.advance()
+            self.newInput = Input(parathonResult, self.captionTitle)
+            #self.newInput = Output(parathonResult, self.captionTitle)
+            self.segmentation = self.newInput
+            progressBar.finish()        
+            
             self.controlArea.setDisabled(False)
-            message = u'%i segment@p sent to output.' % len(bypassed_data)
-            message = pluralize(message, len(bypassed_data))
+            message = u'%i segment@p sent to output.' % len(self.inputsegmentation)
+            message = pluralize(message, len(self.inputsegmentation))
             self.infoBox.setText(message)
-            self.send('Segmented data', bypassed_data, self)
+            # Send token...
+            self.send('Segmented data', self.segmentation, self)
+            #self.send('Segmented data', parathonResult, self)
+            
             self.sendButton.resetSettingsChangedFlag()
             
         
@@ -425,8 +438,10 @@ class Parathon(OWTextableBaseWidget):
         self.dictLabels = sorted(self.defaultDict.keys())
     
     def getSubDictList(self):
+        # Sets lists to contain sub labels
         self.cmcDictLabels = []
         self.f2fDictLabels = []
+        # Gets all sub labels and stoxks them in the right list
         for key in self.selectedDictionaries:
             subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
             for subDictLabel in subDictLabelsList:
@@ -434,6 +449,8 @@ class Parathon(OWTextableBaseWidget):
                 self.cmcDictLabels.append(subDictLabel[1])
         self.processRadioButton()
     
+
+    # Displays the right sub labels according to the selected dictionnaries
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
@@ -494,7 +511,7 @@ if __name__ == "__main__":
     myApplication = QApplication(sys.argv)
     myWidget = Parathon()
     #myWidget.inputData(Input('03/02/2021, 19:30 - sorcha: *LMAO'))
-    myWidget.inputData(Input('a simple example :)'))
+    myWidget.inputData(Input('a simple example :) ;)'))
     myWidget.show()
     myApplication.exec_()
     myWidget.saveSettings()
