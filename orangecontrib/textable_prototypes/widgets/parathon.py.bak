@@ -485,6 +485,7 @@ class Parathon(OWTextableBaseWidget):
                     )
         self.subDictLabels = list(self.subDictUniqueLabels)
         self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
+        print(self.subDict)
     
     def selectAll(self):
         self.selectedDictionaries = list(range(len(self.dictLabels)))
