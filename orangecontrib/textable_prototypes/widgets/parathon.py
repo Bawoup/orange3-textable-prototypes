@@ -6,28 +6,30 @@ __email__ = "rabet.zakari@gmail.ch"
 # Standard imports...
 import re, json, csv, os, platform, codecs, inspect
 
+
 from Orange.widgets import widget, gui, settings
-from Orange.widgets.widget import OWWidget, Input
+from Orange.widgets.widget import OWWidget, Input, Output
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from enum import Enum
 from pathlib import Path
 from LTTL.Segmentation import Segmentation
+from LTTL.Segmenter import bypass
 from PyQt5.QtWidgets import QMessageBox
 from PyQt4.QtGui import QTabWidget, QWidget, QHBoxLayout
 from _textable.widgets.TextableUtils import (
     OWTextableBaseWidget, VersionedSettingsHandler,
-    JSONMessage, InfoBox, SendButton, AdvancedSettings
+    JSONMessage, InfoBox, SendButton, AdvancedSettings,
+    ProgressBar, pluralize
 )
 
 __version__ = "0.0.1"
 
 
-class Detect(OWTextableBaseWidget):
+class Parathon(OWTextableBaseWidget):
     """An Orange widget that lets extract paratextual elements from a text"""
         
     #----------------------------------------------------------------------
     # Widget's metadata...
-    
     name = "Parathon"
     description = "Extract paratextual elements"
     icon = "icons/parathon.svg"
@@ -36,7 +38,7 @@ class Detect(OWTextableBaseWidget):
     #----------------------------------------------------------------------    
     # Input and output channels...
     inputs = [
-        ('Segmentation', Segmentation, "inputData",)]
+        ('Segmentation', Segmentation, 'inputData',)]
     outputs = [('Segmented data', Segmentation)]
 
     #----------------------------------------------------------------------
@@ -72,12 +74,14 @@ class Detect(OWTextableBaseWidget):
         
         #-------------------------------------------------------------------
         # GUI...
-    
+
+        self.inputsegmentation = None
+        self.newInput = None
         self.infoBox = InfoBox(widget=self.controlArea)
         self.sendButton = SendButton(
             widget=self.controlArea,
             master=self,
-            callback=self.print,
+            callback=self.sendData,
             infoBoxAttribute="infoBox",
             sendIfPreCallback=None
         )
@@ -164,7 +168,7 @@ class Detect(OWTextableBaseWidget):
         # Advanced settings box
         self.advancedBox = gui.widgetBox(
             widget=self.globalBox,
-            box="Advanced Settings",
+            box="Selection Mode",
             orientation="vertical",
         )
         
@@ -217,46 +221,190 @@ class Detect(OWTextableBaseWidget):
     def showAdvancedSettings(self):
         self.advancedSettings.setVisible(self.displayAdvancedSettings)
     
-    def inputData(self, segmentation, language=None, mode=None):
+    def inputData(self, Segmentation, language=None, mode=None):
         # Process incoming segmentation
-        self.inputSegmentation = segmentation
+        self.inputsegmentation = Segmentation
         self.language = language
         self.mode = mode
-<<<<<<< HEAD
         self.infoBox.inputChanged()
         self.sendButton.sendIf()
         
-    def sendData(self):
-        """Preprocess and send data"""
-        if not self.segmentation:
-            self.infoBox.setText(u'Widget needs input.', 'warning')
-            self.send('Segmentation', None, self)
-            return
-        if advancedSettings: # renommer selon le code
-            return
-        else :
-            return
+
+    # Function for the detection of paralinguistic cues
+    def parathonFunction(self, file, AS_SelectionStatus,dicts, ftfList, cmcList):
+   
+        # Dictionnaire où sera stocké les regex à utiliser selon les choix de CMC ou FTF
+        cue_dictionary = {}
+
+        # Si les deux listes sont vides alors cela veut dire que 
+        #if not ftfList and not cmcList:
+        if AS_SelectionStatus == False or AS_SelectionStatus and not cmcList and not ftfList:
+            # Looper chaque dictionnaire choisi
+            for dict in dicts:
+                #Ouvrir le dictionnaire qui est sous format json
+                f = open('dictionaries/'+dict+'.json', encoding='utf-8')
+                data = json.load(f)
+                # Aller chercher les keys du dictionnaire
+                keys = list(data)
+                print("Number of keys " + str(len(keys)))
+                # Combiner ces dictionnaires dans cue_dictionary
+                for key in keys:
+                    cue_dictionary[key] = data[key]
+                print(len(list(cue_dictionary)))
+        elif AS_SelectionStatus==True and ftfList or cmcList:
+            # Looper chaque dictionnaire choisi
+            for dict in dicts:
+                #Ouvrir le dictionnaire qui est sous format json
+                f = open('dictionaries/'+dict+'.json', encoding='utf-8')
+                data = json.load(f)
+                # Aller chercher les keys du dictionnaire
+                keys = list(data)
+                # On va chercher la liste qui n'est pas vide (FTF ou CMC) et on déclare la variable selection et la variable index
+                if ftfList:
+                    selection = ftfList
+                    index = 0
+                if cmcList:
+                    selection = cmcList
+                    index = 1
+            # Une fois ces deux variables déclarées on utilise leur valeur
+            # Pour chaque CMC ou FTF choisi on va aller prendre les regex associées dans chaque dictionnaire puis l'ajouter à un nouveau dictionnaire (--> cue_dictionary)
+                for element in selection:
+                    for key in keys : 
+                        regex1 = re.escape(element)+r"\W"
+                        regex2 = re.escape(element)+r"\Z"
+                        if re.search(regex1, str(data[key][index])) or re.search(regex2, str(data[key][index])):
+                            cue_dictionary[key] = data[key]
+
+        txt = file
+
+        # Here we split the text into tokens. Emojis count as tokens. Some punctuation
+        # is included as a word character so we may take into account,
+        # for example, *corrections and _whatsapp formatting_.
+        split = re.findall(r"[\w'*_~]+|[.,!?;:)\*]+|\s+|[\U00010000-\U0010ffff]", txt, flags=re.UNICODE)
+        position = 0
+        output = list()
+        for token in split:
+            start = position
+            position = position + len(token)
+            end = position
+            matches_for_token = list()
+            for key in cue_dictionary:
+                # Some of the regexes require flags.
+                # This part allows us to use those flags.
+                try:
+                    if cue_dictionary[key][3]:
+                        if re.search(key, token, flags=eval(cue_dictionary[key][3])):
+                            matches_for_token.append([token, cue_dictionary[key], start, end])
+                except IndexError:
+                    if re.search(key, token):
+                        matches_for_token.append([token, cue_dictionary[key], start, end])
+            # Append properties to lists for later
+            if len(matches_for_token) > 1:
+                ftf_properties = list()
+                cmc_properties_main = list()
+                cmc_properties_sub = list()
+                for match in matches_for_token:
+                    ftf_properties.append(match[1][0])
+                    cmc_properties_main.append(match[1][1])
+                    cmc_properties_sub.append(match[1][2])
+            elif len(matches_for_token) == 1:
+                ftf_properties = matches_for_token[0][1][0]
+                cmc_properties_main = matches_for_token[0][1][1]
+                cmc_properties_sub = matches_for_token[0][1][2]
+            elif (token, " ", " ", start, end) not in output:
+                ftf_properties = " "
+                cmc_properties_main = " "
+                cmc_properties_sub = " "
+            output.append((token, ftf_properties, cmc_properties_main, cmc_properties_sub, start, end))
         
-        self.infoBox.setText(u"Processing, please wait...", "warning")
-        self.controlArea.setDisabled(True)
-        progressBar = ProgressBar(
-            self,
-            iterations=len(self.segmentation)
-        )
-        preprocessed_data, _ = Segmenter.recode( # renommer selon le code
-            self.segmentation,
-            copy_annotations=self.copyAnnotations, # to do renommer suivant le reste
-            progress_callback=progressBar.advance,
-        )
-        progressBar.finish()
-        self.controlArea.setDisabled(False)
-        message = u'%i segment@p sent to output.' % len(preprocessed_data)
-        message = pluralize(message, len(preprocessed_data))
-        self.infoBox.setText(message)
-        self.send('Segmentation', preprocessed_data, self)
-        self.sendButton.resetSettingsChangedFlag()
-=======
->>>>>>> parent of d152cbd (Update parathon_new.py)
+        # Transform output to xml format
+        output_str_xml = '<?xml version="1.0" encoding="UTF-8"?>\n\t<input>'
+        xml_output=list()
+        for token in output:
+            if token[1]!=" ":
+                token_info_xml='<cue f2f="'+str(token[1])+'" cmc_main="'+str(token[2])+'" cmc_sub="'+str(token[3])+'">'+str(token[0])+'</cue>'
+                xml_output.append(token_info_xml)
+            else:
+                xml_output.append(token[0])
+        for token in xml_output:
+            output_str_xml = output_str_xml + token
+        output_str_xml = output_str_xml + "\n</input>"
+
+        print(output_str_xml)
+        return output_str_xml
+    
+    def sendData(self):
+        
+        # True si advanced setting coché et False sinon
+        AS_SelectionStatus = self.displayAdvancedSettings
+        print("\nAdvanced Settings is selected : " + str(AS_SelectionStatus))
+
+        # Dictionnaires sélectionnés
+        selectedDictsLabels = [self.dictLabels[item] for item in self.selectedDictionaries]
+        print("Selected dictionnaries " + str(selectedDictsLabels))
+
+        # Sous-Dictionnaires (les CMTs ou FTFs) sélectionnés
+        if AS_SelectionStatus == True:
+            selectedSubDictsLabels = [list(self.subDictUniqueLabels)[item] for item in self.selectedSubDictionaries]
+            print("Selected subDicts = " + str(selectedSubDictsLabels))
+
+
+        # Determine ici le mode de sélection coché
+        if isinstance(self.subDict, int) and AS_SelectionStatus==True:
+            selectedMode = ['CMC', 'F2F'][self.subDict]
+            # Assigner les valeurs de CMTs ou FTFs à des listes
+            if selectedMode == "CMC":
+                cmcList = selectedSubDictsLabels
+                ftfList = []
+            
+            if selectedMode == "F2F":
+                cmcList = []
+                ftfList = selectedSubDictsLabels
+        else:
+            cmcList = []
+            ftfList = []
+            print("The selected sublists " + str(cmcList), str(ftfList))
+            print("Neither CMC or F2F are selected")
+
+        # Preprocess and send data
+        if not self.inputsegmentation:
+            self.infoBox.setText(u'Widget needs input.', 'warning')
+            self.send('Segmented data', None, self)
+            return
+        # if advancedSettings: # renommer selon le code
+            # return
+        else :
+            self.infoBox.setText(u"Processing, please wait...", "warning")
+            self.controlArea.setDisabled(True)
+            progressBar = ProgressBar(
+                self,
+                iterations=len(self.inputsegmentation)
+            )
+            
+            # On va chercher l'input et on lui applique la fonction parathon
+            textInput = self.inputsegmentation.get_data(0)
+            parathonResult = self.parathonFunction(textInput, AS_SelectionStatus,selectedDictsLabels, ftfList, cmcList)
+
+            # Remplacer cette ligne de code par celle qui transforme parathonResult en segmentation (?) pour être envoyé comme output
+            #bypassed_data = bypass(self.inputsegmentation, label=self.captionTitle)
+
+            progress_callback=progressBar.advance
+            progressBar.advance()
+            self.newInput = Input(parathonResult, self.captionTitle)
+            #self.newInput = Output(parathonResult, self.captionTitle)
+            self.segmentation = self.newInput
+            progressBar.finish()        
+            
+            self.controlArea.setDisabled(False)
+            message = u'%i segment@p sent to output.' % len(self.inputsegmentation)
+            message = pluralize(message, len(self.inputsegmentation))
+            self.infoBox.setText(message)
+            # Send token...
+            self.send('Segmented data', self.segmentation, self)
+            #self.send('Segmented data', parathonResult, self)
+            
+            self.sendButton.resetSettingsChangedFlag()
+            
         
     def getDictList(self):        
         # Setting the path of the file and retrieving file dictionary names
@@ -265,7 +413,7 @@ class Detect(OWTextableBaseWidget):
         )
         folderPath = os.path.join(actualFolderPath, "dictionaries")
         
-        self.defaultDict = {}
+        self.defaultDict = {} # nom du fichier et contenu du fichier
         for file in os.listdir(folderPath):
             if file.endswith(".json"):
                 # Gets json file name and substracts .json extension
@@ -290,8 +438,10 @@ class Detect(OWTextableBaseWidget):
         self.dictLabels = sorted(self.defaultDict.keys())
     
     def getSubDictList(self):
+        # Sets lists to contain sub labels
         self.cmcDictLabels = []
         self.f2fDictLabels = []
+        # Gets all sub labels and stoxks them in the right list
         for key in self.selectedDictionaries:
             subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
             for subDictLabel in subDictLabelsList:
@@ -299,6 +449,8 @@ class Detect(OWTextableBaseWidget):
                 self.cmcDictLabels.append(subDictLabel[1])
         self.processRadioButton()
     
+
+    # Displays the right sub labels according to the selected dictionnaries
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
@@ -339,97 +491,16 @@ class Detect(OWTextableBaseWidget):
         self.selectedDictionaries = []
         self.getSubDictList()
     
-    # Function for the detection of paralinguistic cues
-    def parathon(self):
-        os.chdir('.')
-        with open('dictionaries/neutral.json', encoding='utf-8') as json_file:
-            cue_dictionary = json.load(json_file)
-            # here our two optional extra dictionaries are loaded
-            if self.language:
-                try:
-                    with open('dictionaries/'+self.language+'.json', encoding='utf-8') as language_file:
-                        language_dictionary = json.load(language_file)
-                        cue_dictionary.update(language_dictionary)
-                except FileNotFoundError:
-                    print("ERROR: language file could not be found. Analysing with neutral dictionary.")
-            if self.mode:
-                try:
-                    with open('dictionaries/'+self.mode+'.json', encoding='utf-8') as mode_file:
-                        mode_dictionary = json.load(mode_file)
-                        cue_dictionary.update(mode_dictionary)
-                except FileNotFoundError:
-                    print("ERROR: mode dictionary could not be found. Analysing with neutral dictionary.")
-        txt = self.file.read()
+    
+    def setCaption(self, title):
+        if 'captionTitle' in dir(self):
+            changed = title != self.captionTitle
+            super().setCaption(title)
+            if changed:
+                self.sendButton.settingsChanged()
+        else:
+            super().setCaption(title)
         
-        # Here we split the text into tokens. Emojis count as tokens. Some punctuation
-        # is included as a word character so we may take into account,
-        # for example, *corrections and _whatsapp formatting_.
-
-        split = re.findall(r"[\w'*_~]+|[.,!?;:)\*]+|\s+|[\U00010000-\U0010ffff]", txt, flags=re.UNICODE)
-        position = 0
-        output = list()
-        for token in split:
-            start = position
-            position = position + len(token)
-            end = position
-            matches_for_token = list()
-            for key in cue_dictionary:
-                # Some of the regexes require flags.
-                # This part allows us to use those flags.
-                try:
-                    if cue_dictionary[key][3]:
-                        if re.search(key, token, flags=eval(cue_dictionary[key][3])):
-                            matches_for_token.append([token, cue_dictionary[key], start, end])
-                except IndexError:
-                    if re.search(key, token):
-                        matches_for_token.append([token, cue_dictionary[key], start, end])
-            # Append properties to lists for later
-            if len(matches_for_token) > 1:
-                ftf_properties = list()
-                cmc_properties_main = list()
-                cmc_properties_sub = list()
-                for match in matches_for_token:
-                    ftf_properties.append(match[1][0])
-                    cmc_properties_main.append(match[1][1])
-                    cmc_properties_sub.append(match[1][2])
-            elif len(matches_for_token) == 1:
-                ftf_properties = matches_for_token[0][1][0]
-                cmc_properties_main = matches_for_token[0][1][1]
-                cmc_properties_sub = matches_for_token[0][1][2]
-            elif (token, " ", " ", start, end) not in output:
-                ftf_properties = " "
-                cmc_properties_main = " "
-                cmc_properties_sub = " "
-            output.append((token, ftf_properties, cmc_properties_main, cmc_properties_sub, start, end))
-        return output
-
-    # Function to return a csv file from the output.
-    # User can define filename.
-    def csvify(self, parathon, filename):
-        header=["token", "ftf", "cmc_main", "cmc_sub", "start", "end"]
-        with open(filename+".csv", "w", newline="\n", encoding="utf-8") as csvfile:
-            filewriter=csv.writer(csvfile, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            filewriter.writerow(header)
-            for item in parathon:
-                filewriter.writerow(item)
-        csvfile.close()
-
-    # Same as CSV but it's XML this time.
-    def xmlify(self, parathon, filename):
-        xml_file = open(filename+".xml", "w", encoding="utf8")
-        output_str_xml = '<?xml version="1.0" encoding="UTF-8"?>\n\t<input>'
-        xml_output=list()
-        for token in parathon:
-            if token[1]!=" ":
-                token_info_xml='<cue f2f="'+str(token[1])+'" cmc_main="'+str(token[2])+'" cmc_sub="'+str(token[3])+'">'+str(token[0])+'</cue>'
-                xml_output.append(token_info_xml)
-            else:
-                xml_output.append(token[0])
-        for token in xml_output:
-            output_str_xml = output_str_xml + token
-        output_str_xml = output_str_xml + "\n</input>"
-        xml_file.write(output_str_xml)
-        xml_file.close()
 
         
 if __name__ == "__main__":
@@ -438,9 +509,9 @@ if __name__ == "__main__":
     from LTTL.Input import Input
     
     myApplication = QApplication(sys.argv)
-    myWidget = Detect()
-    myWidget.inputData(Input('a simple example :)'))
+    myWidget = Parathon()
+    #myWidget.inputData(Input('03/02/2021, 19:30 - sorcha: *LMAO'))
+    myWidget.inputData(Input('a simple example :) ;)'))
     myWidget.show()
     myApplication.exec_()
     myWidget.saveSettings()
-        
