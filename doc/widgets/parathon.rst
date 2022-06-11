@@ -84,7 +84,7 @@ This figure shows how it appears if the user selected **Send automatically**.
 
 **Advanced settings** section has been selected. On the left part of the section, one can select one or more dictionaries. 
 When a dictionary is selected, the part on the right, i.e. the **Selection Mode** section changes according to the selected dictionary.
-**Selection Mode** presents the two paralinguistic categories **CMC** and **F2**. **CMC** means Computer-Mediated Communication and **F2F** means Face-to-Face.
+**Selection Mode** presents the two paralinguistic categories **CMC** and **F2F**. **CMC** means Computer-Mediated Communication and **F2F** means Face-to-Face.
 One can select either one, and then opt for a more advanced analysis by selecting sub-elements within each one that depend on each dictionary.
 
 The sub-elements include:
@@ -170,16 +170,3 @@ Errors
 
 *Couldn't open file.*
     An error has prevented the widget to open to uploaded file.
-
-*Unvalid interaction.*
-    An error prevented the widget from connecting to another widget.
-
-*ERROR: language file could not be found. Analysing with neutral dictionary.*
-    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
-    respectively the langage one. The neutral dictionary is chosen automatically.
-
-*ERROR: mode dictionary could not be found. Analysing with neutral dictionary.*
-    An error prevented the widget from working because a dictionary name does not exist or is not found in the correct location, 
-    respectively the mode one. The neutral dictionary is chosen automatically.
-
-The last two errors are not really used but are extended errors that can be used in future modifications using Sorcha Walsh's code.
