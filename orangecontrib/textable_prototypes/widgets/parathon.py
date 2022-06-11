@@ -444,36 +444,56 @@ class Parathon(OWTextableBaseWidget):
         # Sets lists to contain sub labels
         self.cmcDictLabels = []
         self.f2fDictLabels = []
-        # Gets all sub labels and stoxks them in the right list
+ 
+        # Gets all sub labels and stocks them in the right list
         for key in self.selectedDictionaries:
             subDictLabelsList = self.defaultDict[self.dictLabels[key]].values()
             for subDictLabel in subDictLabelsList:
                 self.f2fDictLabels.append(subDictLabel[0])
                 self.cmcDictLabels.append(subDictLabel[1])
         self.processRadioButton()
-    
 
     # Displays the right sub labels according to the selected dictionnaries
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
-        self.subDictUniqueLabels = set()
+        self.subDictUniqueLabels = set()       
+        # Defines dictionaries to link sub labels code to their type
+        codeToType = {
+        'vd': 'Vocal d.',
+        'acro': 'Acronym',
+        'vsp': 'Vocal Spelling',
+        'pun': 'Punctuation',
+        'emj': 'Emoji',
+        'emt': 'Emoticon',
+        'VKG': 'Visual Kinesics Gestures',
+        'no_f2f_equivalent': 'No FTF equivalent',
+        'TKF': 'Tactile Kinesics Facial',
+        'A': 'Artifact',
+        'VS': 'Vocalisation',
+        'VQ': 'Voice Quality',
+        'VK': 'Visual Kinesics',
+        'TK': 'Tactile Kinesics',
+        'VKF': 'Visual Kinesics Facial'        
+        }
         
         if self.subDict == 0:
             for elem in self.cmcDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
-                    tempList.append(tempElems)
+                    for item in tempElems:
+                        tempList.append(codeToType[item])
                 else:
-                    tempList.append(elem)
+                    tempList.append(codeToType[elem])
             self.subDictUniqueLabels.update(tempList)
         elif self.subDict == 1:
             for elem in self.f2fDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
-                    tempList.extend(tempElems)
+                    for item in tempElems:
+                        tempList.append(codeToType[item])
                 else:
-                    tempList.append(elem)
+                    tempList.append(codeToType[elem])
             self.subDictUniqueLabels.update(tempList)
         else:
             print(self.subDict)
