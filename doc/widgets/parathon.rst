@@ -30,7 +30,7 @@ Outputs:
 
 * ``Segmented data``
 
-  A Textable segmentation containing the same words annotated with the discovered paratextual elements.
+  A Textable segmentation containing the same words annotated with the discovered paratextual elements and its position.
 
 Description
 -----------
@@ -39,6 +39,7 @@ The widget is based on a Python package created by Sorcha Walsh that you can fin
 
 This widget takes a segmentation as input and applies dictionaries. The dictionaries are stored in default_dict as regex dictionaries. The files are in JSON format.
 The widget annotates the input text and extract the paralinguistic elements specific to digital communication, while relating them to the paralinguistic features present in face-to-face communication.
+However, the final result is not really that. We were not able to display it that way. 
 
 Interface
 ~~~~~~~~~
@@ -60,6 +61,9 @@ If no input has been connected, the parathon widget cannot work. It sends an err
     :scale: 50 %
 
 After connecting a Textable widget as an input, the user can start using the parathon widget.
+There is a problem with the input because the Parathon widget, in its current state, requires a Segment widget as input after the text field widget. 
+Indeed, if you only connect a text field widget, for example, to the Parathon widget, it doesn't work.
+
 The minimal window, presents the **Dictionaries** section, in which the user can select one or 
 more dictionaries found in json files. These dictionaries are composed of regex lists.
 
@@ -125,7 +129,7 @@ The sub-elements include:
 
 For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
 
-Figure 4, shows exemple of **CMC** sub-elements for the **neutral** dictionary.
+The image bellow shows an example of **CMC** sub-elements for the **neutral** dictionary.
 
 .. _parathon_fig5:
 
@@ -133,12 +137,17 @@ Figure 4, shows exemple of **CMC** sub-elements for the **neutral** dictionary.
     :align: center
     :scale: 50 %
 
-Figure 5, shows exemple of **F2F** sub-elements for the **neutral** dictionary.
+The following picture shows example of **F2F** sub-elements for the **neutral** dictionary.
 In this case, all sub-elements are selected. This does not have to be the case. 
-The **Deselect All**, **Select All** and **Reload** commands also work in the **Selection Mode** section.
+The **Deselect All** and **Select All** are also to be found in the **Selection Mode** section.
 If the user chooses a category, for example, **CMC**, and selects a few sub-elements, the result will only show 
 the elements of that choice. It is only possible to select one category and not both.
 If one wants both categories, then one should stay in the minimal version where one chooses only the dictionaries. 
+
+The last image shows how the results are displayed via the Display widget. The result is presented in a segmentation where the position of the paratextual element in the segmentation can be seen as well as the category of each element.
+However, this is not the result we wanted to obtain.
+
+.. figure:: figures/parathon_fig6.png
 
 Messages
 ---------
@@ -164,6 +173,8 @@ Warnings
 *Processing, please wait...*
    The data has been sent. The widget is doing its processing to output the result.
 
+*Please select at least 1 dictionary.*
+    The widget instance cannot be processed because no dictionary has been selected.
 
 Errors
 ~~~~~~
