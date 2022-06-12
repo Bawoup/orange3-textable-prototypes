@@ -271,6 +271,7 @@ class Parathon(OWTextableBaseWidget):
         )
         if AS_SelectionStatus == False or AS_SelectionStatus and not cmcList and not f2fList:
             # Looper chaque dictionnaire choisi
+            print("in the loop")
             for dict in dicts:
                 #Ouvrir le dictionnaire qui est sous format json
                 f = open(os.path.join(current_path, 'dictionaries', dict+'.json'), 
@@ -285,6 +286,7 @@ class Parathon(OWTextableBaseWidget):
                 print(len(list(cue_dictionary)))
         elif AS_SelectionStatus==True and f2fList or cmcList:
             # Looper chaque dictionnaire choisi
+            print("in the advanced loop")
             for dict in dicts:
                 #Ouvrir le dictionnaire qui est sous format json
                 f = open(os.path.join(current_path, 'dictionaries', dict+'.json'), 
@@ -383,15 +385,32 @@ class Parathon(OWTextableBaseWidget):
         AS_SelectionStatus = self.displayAdvancedSettings
         print("\nAdvanced Settings is selected : " + str(AS_SelectionStatus))
 
+        current_path = os.path.dirname(
+            os.path.abspath(inspect.getfile(inspect.currentframe()))
+        )
+        print(current_path)
+        f = open(os.path.join(current_path, 'codeToType.json'), 
+                    encoding='utf-8')
+        codeToType = json.load(f)
+        print(codeToType)
+        codeToTypeInverse = dict((v, k) for k, v in codeToType.items())
+        print(codeToTypeInverse)
         # Dictionnaires sélectionnés
         selectedDictsLabels = [self.dictLabels[item] for item in self.selectedDictionaries]
+        print("Length of selected labels : " + str(len(selectedDictsLabels)))
+        print(selectedDictsLabels)
         print("Selected dictionnaries " + str(selectedDictsLabels))
+        #selectedDictsLabels [codeToType[item] for item in ]
 
         # Sous-Dictionnaires (les CMTs ou f2fs) sélectionnés
         if AS_SelectionStatus == True:
-            selectedSubDictsLabels = [list(self.subDictUniqueLabels)[item] for item in self.selectedSubDictionaries]
+            selectedSubDictsLabelsWhole = [list(self.subDictUniqueLabels)[item] for item in self.selectedSubDictionaries]
+            selectedSubDictsLabels = [codeToTypeInverse[item] for item in selectedSubDictsLabelsWhole]
             print("Selected subDicts = " + str(selectedSubDictsLabels))
 
+        if AS_SelectionStatus == True and len(selectedSubDictsLabels)==0:
+            selectedDictsLabels = []
+            print("NO DICTS")
 
         # Determine ici le mode de sélection coché
         if isinstance(self.subDict, int) and AS_SelectionStatus==True:
@@ -486,6 +505,9 @@ class Parathon(OWTextableBaseWidget):
         # Sorts defaultDict and display the right titles in the listBox            
         self.dictLabels = sorted(self.defaultDict.keys())
     
+
+    
+
     def getSubDictList(self):
         # Sets lists to contain sub labels
         self.cmcDictLabels = []
@@ -499,29 +521,21 @@ class Parathon(OWTextableBaseWidget):
         self.processRadioButton()
     
 
+
     # Displays the right sub labels according to the selected dictionnaries
     def processRadioButton(self):  
         self.subDictLabels = []
         tempList = []
         self.subDictUniqueLabels = set()
         # Defines dictionaries to link sub labels code to their type
-        codeToType = {
-        'vd': 'Vocal d.',
-        'acro': 'Acronym',
-        'vsp': 'Vocal Spelling',
-        'pun': 'Punctuation',
-        'emj': 'Emoji',
-        'emt': 'Emoticon',
-        'VKG': 'Visual Kinesics Gestures',
-        'no_f2f_equivalent': 'No FTF equivalent',
-        'TKF': 'Tactile Kinesics Facial',
-        'A': 'Artifact',
-        'VS': 'Vocalisation',
-        'VQ': 'Voice Quality',
-        'VK': 'Visual Kinesics',
-        'TK': 'Tactile Kinesics',
-        'VKF': 'Visual Kinesics Facial'        
-        }
+        current_path = os.path.dirname(
+            os.path.abspath(inspect.getfile(inspect.currentframe()))
+        )
+        print(current_path)
+        f = open(os.path.join(current_path, 'codeToType.json'), 
+                    encoding='utf-8')
+        codeToType = json.load(f)
+        
         
         if self.subDict == 0:
             for elem in self.cmcDictLabels:
