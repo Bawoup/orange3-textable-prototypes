@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <scheme version="2.0" title="" description="">
 	<nodes>
-		<node id="0" name="Parathon" qualified_name="orangecontrib.textable_prototypes.widgets.parathon_new.Detect" project_name="Orange3-Textable-Prototypes" version="" title="Parathon" position="(353.0, 223.0)" />
-		<node id="1" name="Text Field" qualified_name="_textable.widgets.OWTextableTextField.OWTextableTextField" project_name="Orange3-Textable" version="" title="Text Field" position="(112.0, 216.0)" />
-		<node id="2" name="Display" qualified_name="_textable.widgets.OWTextableDisplay.OWTextableDisplay" project_name="Orange3-Textable" version="" title="Display" position="(492.0, 233.0)" />
-		<node id="3" name="Segment" qualified_name="_textable.widgets.OWTextableSegment.OWTextableSegment" project_name="Orange3-Textable" version="" title="Segment" position="(237.0, 219.0)" />
+		<node id="0" name="Display" qualified_name="_textable.widgets.OWTextableDisplay.OWTextableDisplay" project_name="Orange3-Textable" version="" title="Display" position="(492.0, 233.0)" />
+		<node id="1" name="Segment" qualified_name="_textable.widgets.OWTextableSegment.OWTextableSegment" project_name="Orange3-Textable" version="" title="Segment" position="(237.0, 219.0)" />
+		<node id="2" name="Text Field" qualified_name="_textable.widgets.OWTextableTextField.OWTextableTextField" project_name="Orange3-Textable" version="" title="Text Field" position="(104.0, 219.0)" />
+		<node id="3" name="Parathon" qualified_name="orangecontrib.textable_prototypes.widgets.parathon.Parathon" project_name="Orange3-Textable-Prototypes" version="" title="Parathon" position="(357.0, 215.0)" />
 	</nodes>
 	<links>
-		<link id="0" source_node_id="0" sink_node_id="2" source_channel="Segmented data" sink_channel="Segmentation" enabled="true" />
-		<link id="1" source_node_id="1" sink_node_id="3" source_channel="Text data" sink_channel="Segmentation" enabled="true" />
+		<link id="0" source_node_id="2" sink_node_id="1" source_channel="Text data" sink_channel="Segmentation" enabled="true" />
+		<link id="1" source_node_id="1" sink_node_id="3" source_channel="Segmented data" sink_channel="Segmentation" enabled="true" />
 		<link id="2" source_node_id="3" sink_node_id="0" source_channel="Segmented data" sink_channel="Segmentation" enabled="true" />
 	</links>
 	<annotations>
@@ -17,79 +17,28 @@
 		<arrow id="2" start="(386.0, 360.0)" end="(360.0, 277.0)" fill="#C1272D" />
 		<arrow id="3" start="(571.0, 168.0)" end="(527.0, 237.0)" fill="#C1272D" />
 		<text id="4" type="text/plain" rect="(82.0, 13.0, 203.0, 145.0)" font-family=".SF NS Text" font-size="16">1. Choose an input widget (for example Text Field or Text Files) and upload/write the content you want to analyse. Click Send.</text>
-		<text id="5" type="text/plain" rect="(144.0, 325.0, 150.0, 107.0)" font-family=".SF NS Text" font-size="16">2. Choose Segment into words if needed. Click Send.
-This step is not an obligation. You can
+		<text id="5" type="text/plain" rect="(144.0, 325.0, 150.0, 107.0)" font-family=".SF NS Text" font-size="16">2. Choose Segment into lines. Click Send.
+This step is an obligation at the moment because otherwise it doesn't work. Without our input problem you could
 go directly from the input widget to the Parathon widget.</text>
 		<text id="6" type="text/plain" rect="(392.0, 329.0, 150.0, 259.0)" font-family=".SF NS Text" font-size="16">3. Choose one or more dictionnaries and click Send.
 OR
 Choose one or more dictionnaries. Check Advanced Settings, select your preferences in the Selection mode section. Click Send. </text>
-		<text id="7" type="text/plain" rect="(573.0, 85.0, 150.0, 26.0)" font-family=".SF NS Text" font-size="16">4. View the result in text format with XML markups in Display.</text>
+		<text id="7" type="text/plain" rect="(573.0, 85.0, 150.0, 26.0)" font-family=".SF NS Text" font-size="16">4. View the result as a segmentation and the categorisation of the paratextual element (the position of the paratextual element is also given)</text>
 	</annotations>
 	<thumbnail />
 	<node_properties>
-		<properties node_id="0" format="pickle">gASV8QwAAAAAAAB9lCiMCGF1dG9TZW5klIiMDWNtY0RpY3RMYWJlbHOUXZQojAN2c3CUjAN2c3CU
-jARhY3JvlIwEYWNyb5SMA3ZzcJSMA3ZzcJSMA3B1bpSMA3B1bpSMA3B1bpSMA3B1bpSMA3B1bpSM
-A3B1bpSMA3B1bpSMA3B1bpSMA2VtapSMA2VtapSMA2VtapSMA2VtapSMA2VtapSMA2VtapSMA2Vt
-apSMA2VtapSMA2VtapSMA2VtapSMA2VtdJSMA2VtdJSMA2VtdJSMA2VtdJSMAnZklGWMEmNvbnRy
-b2xBcmVhVmlzaWJsZZSIjAtkZWZhdWx0RGljdJR9lCiMB2VuZ2xpc2iUfZQojM4oXmFoYSskfF5h
-aGVtK3xeYStoKyR8XmErcitnKyR8XmErcitnK2grJHxeYSt3KyR8XmJsYWgrJHxeYm9vKyR8XmJy
-ezIsfSR8XmR1K2grJHxeZStrKyR8XmUraCskfF5oK20rJHxebStoKyR8Xm0raCttKyR8XmgrbSto
-KyR8XmgrdStoKyR8Xmh1bXBoJHxebytoKyR8Xm8rdStjK2grJHxebyt3KyR8XnAraCtlK3crJHxe
-cytoKyR8Xncrbyt3KyR8XnkrZSthK2gkKZRdlCiMAlZTlGgEjAd2b2Nfc2VnlIwNcmUuSUdOT1JF
-Q0FTRZRljCZeKGF8ZXxpfG8pKig/OihoKyhhKyl8aCtlK3xoaXxoK28rKSkrJJRdlCiMAlZTlGgF
-jAd2b2Nfc2VnlIwNcmUuSUdOT1JFQ0FTRZRljDsoXmwrbytsJHxebCttK2ErbyskfF5sK2YrbSth
-K28kfF5yK28rZitsJHwsXnIrbyt0K2YrbCtvK2wkKZRdlCiMAlZTlGgGjAVsYXVnaJSMDXJlLklH
-Tk9SRUNBU0WUZYwKXm8rbStmKmcrJJRdlCiMAlZTlGgHjAdleGNsYWltlIwNcmUuSUdOT1JFQ0FT
-RZRldYwId2hhdHNhcHCUfZSMGF4oXCp8XH58XF8pLiooXCp8XH58XF8pJJRdlCiMAlZRlGggjAZm
-b3JtYXSUZXOMB25ldXRyYWyUfZQojAooXHcpXDF7Mix9lF2UKIwCVlOUaAiMB2xldF9yZXCUZYwJ
-W0EtWl17Myx9lF2UKIwCVlGUaAmMA2NhcJRljAdbIV17Mix9lF2UKIwCVlGUaAqMB2V4Y2xhaW2U
-ZYwOKFw/XCEpK3woIVw/KSuUXZQojAJWUZRoC4wNZXhjbGFpbV9xdWVzdJRljAhbXC5dezIsfZRd
-lCiMAlZRlGgMjAhlbGxpcHNpc5RljAdbP117Mix9lF2UKIwCVlGUaA2MBXF1ZXN0lGWMEChcKlte
-XCorXSg/IVwqKSmUXZQojBFub19mMmZfZXF1aXZhbGVudJRoDowHY29ycmVjdJRljAsoXCpbXHdd
-K1wqKZRdlCiMAlZRlGgPjBN3aGlzcGVyX29yX2VtcGhhc2lzlGWMEihbXHddK1wqezEsfVtcd10r
-KZRdlCiMAlZRlGgQjAZjZW5zb3KUZYwGKFx3LSkrlF2UKIwCVlOUaBGMBGRhc2iUZVgJAQAAW/Cf
-mIB88J+Yg3zwn5iEfPCfmIF88J+Yinzwn5iNfPCfmIV88J+Yonzwn5iGfPCfmJR88J+Yjnzwn5iH
-fPCfmIx88J+Yi3zwn5iPfPCfmYJ88J+kqXzwn5iSfPCfmJx88J+YkXzwn5iefPCfpKp88J+YoXzw
-n5ilfPCfpKR88J+Ys3zwn5idfPCfmKx88J+Yk3zwn5ijfOKYuXzwn5igfPCfmJV88J+YkHzwn5ib
-fPCfmKt88J+YsHzwn5i2fPCfmYF88J+kk3zwn5iWfPCfmKh88J+Yt3zwn5iffPCfmLV88J+koHzw
-n6eQfPCfmK988J+Yp3zwn5imfPCfpJJ88J+klXzwn6WwXZRdlCiMA1ZLRpRoEowDZW1mlGWMGlvw
-n5iYfPCfmJd88J+Ymnzwn5iZfPCfpJddlF2UKIwLVEtGLCBWSywgVlOUaBOMA2VtZpRljG9b8J+Y
-gnzwn6SjfPCfpJR88J+YiXzwn6WxfPCfmK188J+YuXzwn5ixfPCfpK188J+Yqnzwn5ipfPCfmLR8
-8J+YpHzwn5iyfPCfpKt88J+Yrnzwn6SofPCfpKd88J+kr3zwn6SifPCfpJB88J+krl2UXZQojAdW
-UywgVktGlGgUjANlbWaUZYwLW/CfpJF88J+Zg12UXZQojBFub19mMmZfZXF1aXZhbGVudJRoFYwD
-ZW1mlGWMalvwn5mPfPCfkY188J+Sqnzwn5GMfOKcjHzwn5mMfPCfkYd84pyLfPCfpJh84pidfPCf
-lpV88J+knnzinIp88J+Ri3zwn5GIfPCfpJ988J+Rjnzwn6SyfPCfkYZ84pyNfPCfpJp88J+Wll2U
-XZQojAJWS5RoFowDZW1olGWMBlvwn5GPXZRdlCiMB1ZLRywgVlOUaBeMA2VtaJRljBBb8J+Rinzw
-n5GQfPCflpBdlF2UKIwHVEssIFZLR5RoGIwDZW1olGWMBlvwn6SdXZRdlCiMAlRLlGgZjANlbWiU
-ZYwGW/CfkoVdlF2UKIwRbm9fZjJmX2VxdWl2YWxlbnSUaBqMA2VtaJRljDZb4p2kfPCfkpR84pml
-fPCfkpd88J+Sk3zwn5KVfPCfkpZ88J+Sm3zwn5KZfPCfkpx88J+Sml2UXZQojAFBlGgbjANlbW+U
-ZYwZKCg6LVwqKXwoOlwqKXwoOngpfCg6LXgpKZRdlCiMC1RLLCBWUywgVktGlGgcjANlbXSUZYxO
-KDon4oCRXCh8OidcKHw64oCRRHw6RHw44oCRRHw4RHx44oCRRHx4RHxY4oCRRHxYRHw64oCRT3w6
-T3w6LW98Om98Oi0wfDgtMHw+Ok8plF2UKIwHVlMsIFZLRpRoHYwDZW10lGVY9QEAACg64oCRXCl8
-OlwpfDotXF18OlxdfDpcLTN8OjN8Oi0+fDo+fDhcLVwpfDhcKXw6LX18On18Om9cKXw6Y1wpfDpe
-XCl8PVxdfD1cKXxjOnxDOnw64oCRKHw6KHw64oCRY3w6Y3w64oCRPHw6PHw64oCRXFt8OlxbfDot
-fHx8PjpcW3w6e3w6QHw6KHw7KHw6J+KAkSl8OicpfETigJEnOnxEOjx8RDp8RDh8RDt8RD18RFh8
-OuKAkVB8OlB8WOKAkVB8WFB8eOKAkXB8eHB8OuKAkXB8OnB8OuKAkcOefDrDnnw64oCRw758OsO+
-fDrigJFifDpifGQ6fD1wfD46UHw6XC0vfDovfDrigJEufD46XHw+Oi98Olx8PS98PVx8Okx8PUx8
-OlN8OuKAkXw6fHw6JHw6Ly8pfDovLzN8OuKAkVh8Olh8OuKAkSN8OiN8OuKAkSZ8OiZ8TzrigJEp
-fE86XCl8MDrigJEzfDA6M3wwOuKAkVwpfDA6XCl8MDteXCl8PjrigJFcKXw6XCl8fTrigJFcKXx9
-OlwpfDM64oCRXCl8MzpcKXw+O1wpfD46M3w7M3w7XC1cKXxCXC1cKXw8Xzx8Pl8+fCggzaHCsCDN
-nMqWIM2hwrApfFxeXF58XF5fXF58XF5cXuKAnXxcXlxe4oCZKZRdlCiMAlZLlGgejANlbXSUZYwy
-KFw74oCRXCl8O1wpfFwqLVwpfFwqXCl8O+KAkVxdfDtcXXw7XF5cKXw7Pnw64oCRLCmUXZQojAZW
-SywgVlOUaB+MA2VtdJRldXWMCmRpY3RMYWJlbHOUXZQoaCRoQGg6ZYwXZGlzcGxheUFkdmFuY2Vk
-U2V0dGluZ3OUiIwNZjJmRGljdExhYmVsc5RdlChoKGgtaDJoN2hEaEhoTGhQaFRoWGhcaGBoZGho
-aGxocGh0aHhofGiAaIRoiGiMaJBolGiYaJxooGg+ZYwTc2F2ZWRXaWRnZXRHZW9tZXRyeZRDQgHZ
-0MsAAwAAAAACPgAAAJcAAAQBAAACoAAAAj4AAACtAAAEAQAAAqAAAAAAAAAAAAWgAAACPgAAAK0A
-AAQBAAACoJSMFHNlbGVjdGVkRGljdGlvbmFyaWVzlF2UKEsASwFLAmWMF3NlbGVjdGVkU3ViRGlj
-dGlvbmFyaWVzlF2UKEsASwFLAksDSwRLBUsGSwdLCGWMB3N1YkRpY3SUSwGMDXN1YkRpY3RMYWJl
-bHOUXZQoaFyMAlZLlGgoaJBoSIwDVktHlIwDVEtGlGhsjAJUS5RljBNzdWJEaWN0VW5pcXVlTGFi
-ZWxzlI+UKGhcaGxoSGiyaLFoKGizaJBosJCMBHV1aWSUjCQyMjhjNzJjMC1iNTZiLTRlNWItYjdm
-OC00OWYwODIwNzk0MmaUjAtfX3ZlcnNpb25fX5RLAYwhX1RleHRhYmxlVXRpbHNfc2V0dGluZ3Nf
-dmVyc2lvbl9flEsASwCGlHUu
+		<properties node_id="0" format="literal">{'autoSend': True, 'basicFormatHTML': True, 'controlAreaVisible': True, 'customFormat': '%(__content__)s', 'customFormatting': False, 'displayAdvancedSettings': False, 'encoding': 'utf8', 'footer': '', 'header': '', 'lastLocation': '.', 'limitNumberOfSegments': True, 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\xff\xff\xff\xe2\x00\x00\x00\xbc\x00\x00\x03\xa1\x00\x00\x02\xaf\xff\xff\xff\xe2\x00\x00\x00\xbc\x00\x00\x03\xa1\x00\x00\x02\xaf\x00\x00\x00\x00\x00\x00\x00\x00\x05V\xff\xff\xff\xe2\x00\x00\x00\xbc\x00\x00\x03\xa1\x00\x00\x02\xaf', 'segmentDelimiter': '\\n', 'uuid': 'dee85913-21a7-46af-8581-b4968945de47', '__version__': 1, '_TextableUtils_settings_version__': (0, 16)}</properties>
+		<properties node_id="1" format="literal">{'autoNumber': False, 'autoNumberKey': 'num', 'autoSend': True, 'controlAreaVisible': True, 'displayAdvancedSettings': False, 'importAnnotations': True, 'lastLocation': '.', 'mergeDuplicates': False, 'mode': 'Tokenize', 'regex': '', 'regexes': [], 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x02S\x00\x00\x00\xab\x00\x00\x03\x1a\x00\x00\x02\x9e\x00\x00\x02S\x00\x00\x00\xab\x00\x00\x03\x1a\x00\x00\x02\x9e\x00\x00\x00\x00\x00\x00\x00\x00\x05V\x00\x00\x02S\x00\x00\x00\xab\x00\x00\x03\x1a\x00\x00\x02\x9e', 'segmentType': 'Segment into lines', 'uuid': '21dce2f4-1c33-4766-a4d5-db2cfb22cdd3', '__version__': 1, '_TextableUtils_settings_version__': (0, 21)}</properties>
+		<properties node_id="2" format="literal">{'autoSend': True, 'controlAreaVisible': True, 'encoding': 'utf-8', 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x02@\x00\x00\x00\xac\x00\x00\x03K\x00\x00\x02\x9f\x00\x00\x02@\x00\x00\x00\xac\x00\x00\x03K\x00\x00\x02\x9f\x00\x00\x00\x00\x00\x00\x00\x00\x05V\x00\x00\x02@\x00\x00\x00\xac\x00\x00\x03K\x00\x00\x02\x9f', 'textFieldContent': b':) Hello', 'uuid': 'a5ac33a0-13ab-4b89-9f1d-b51c6fca225d', '__version__': 1, '_TextableUtils_settings_version__': (0, 13)}</properties>
+		<properties node_id="3" format="pickle">gASVoQEAAAAAAAB9lCiMCGF1dG9TZW5klImMEmNvbnRyb2xBcmVhVmlzaWJsZZSIjBdkaXNwbGF5
+QWR2YW5jZWRTZXR0aW5nc5SJjBNzYXZlZFdpZGdldEdlb21ldHJ5lENCAdnQywADAAAAAAUpAAAB
+JAAABpIAAAM3AAAFKgAAAUMAAAaRAAADNgAAAAAAAAAAB4AAAAUqAAABQwAABpEAAAM2lIwUc2Vs
+ZWN0ZWREaWN0aW9uYXJpZXOUjAdjb3B5cmVnlIwOX3JlY29uc3RydWN0b3KUk5SMCGJ1aWx0aW5z
+lIwEbGlzdJSTlGgMKYeUUpQoSwBLAUsCZYwXc2VsZWN0ZWRTdWJEaWN0aW9uYXJpZXOUaAloDGgM
+KYeUUpQoSwBLAUsCSwNLBEsFSwZLB0sIZYwHc3ViRGljdJRLAYwEdXVpZJSMJDg4NjI4ZTcwLTZl
+OWUtNGZlYy1iZmI1LWYwYTY3NzY0Zjc4ZJSMC19fdmVyc2lvbl9flEsBjCFfVGV4dGFibGVVdGls
+c19zZXR0aW5nc192ZXJzaW9uX1+USwBLAIaUdS4=
 </properties>
-		<properties node_id="1" format="literal">{'autoSend': True, 'controlAreaVisible': True, 'encoding': 'utf-8', 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x02@\x00\x00\x00\x96\x00\x00\x03K\x00\x00\x02\x9f\x00\x00\x02@\x00\x00\x00\xac\x00\x00\x03K\x00\x00\x02\x9f\x00\x00\x00\x00\x00\x00\x00\x00\x05\xa0\x00\x00\x02@\x00\x00\x00\xac\x00\x00\x03K\x00\x00\x02\x9f', 'textFieldContent': b'Hello comment vas-tu ? &lt;3', 'uuid': '3fa4ab1e-216c-4d09-93b0-623d47d426b1', '__version__': 1, '_TextableUtils_settings_version__': (0, 13)}</properties>
-		<properties node_id="2" format="literal">{'autoSend': True, 'basicFormatHTML': True, 'controlAreaVisible': True, 'customFormat': '%(__content__)s', 'customFormatting': False, 'displayAdvancedSettings': False, 'encoding': 'utf8', 'footer': '', 'header': '', 'lastLocation': '.', 'limitNumberOfSegments': True, 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x00\xe6\x00\x00\x00\x96\x00\x00\x04\xa5\x00\x00\x02\x9f\x00\x00\x00\xe6\x00\x00\x00\xac\x00\x00\x04\xa5\x00\x00\x02\x9f\x00\x00\x00\x00\x00\x00\x00\x00\x05\xa0\x00\x00\x00\xe6\x00\x00\x00\xac\x00\x00\x04\xa5\x00\x00\x02\x9f', 'segmentDelimiter': '\\n', 'uuid': 'dee85913-21a7-46af-8581-b4968945de47', '__version__': 1, '_TextableUtils_settings_version__': (0, 16)}</properties>
-		<properties node_id="3" format="literal">{'autoNumber': False, 'autoNumberKey': 'num', 'autoSend': True, 'controlAreaVisible': True, 'displayAdvancedSettings': False, 'importAnnotations': True, 'lastLocation': '.', 'mergeDuplicates': False, 'mode': 'Tokenize', 'regex': '', 'regexes': [], 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x02S\x00\x00\x00\x95\x00\x00\x038\x00\x00\x02\x9e\x00\x00\x02S\x00\x00\x00\xab\x00\x00\x038\x00\x00\x02\x9e\x00\x00\x00\x00\x00\x00\x00\x00\x05\xa0\x00\x00\x02S\x00\x00\x00\xab\x00\x00\x038\x00\x00\x02\x9e', 'segmentType': 'Segment into words', 'uuid': '21dce2f4-1c33-4766-a4d5-db2cfb22cdd3', '__version__': 1, '_TextableUtils_settings_version__': (0, 21)}</properties>
 	</node_properties>
 	<session_state>
 		<window_groups />
