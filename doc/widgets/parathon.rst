@@ -129,15 +129,14 @@ The sub-elements include:
 
 For more information, check the rapport_final.pdf that can be find at the following adress: https://github.com/sorchawalsh/parathon.git.
 
-The image bellow shows an example of **CMC** sub-elements for the **neutral** dictionary.
+The image bellow shows an example of **F2F** sub-elements for the **neutral** dictionary.
 
 .. _parathon_fig5:
 
 .. figure:: figures/parathon_fig5.png
     :align: center
     :scale: 50 %
-
-The following picture shows example of **F2F** sub-elements for the **neutral** dictionary.
+    
 In this case, all sub-elements are selected. This does not have to be the case. 
 The **Deselect All** and **Select All** are also to be found in the **Selection Mode** section.
 If the user chooses a category, for example, **CMC**, and selects a few sub-elements, the result will only show 
