@@ -205,6 +205,30 @@ class Parathon(OWTextableBaseWidget):
         
         self.subDictListBox.setSelectionMode(2)
         
+        # Create a button box for the two next buttons
+        subSelectionBox = gui.widgetBox(
+            widget=self.advancedBox,
+            box=False,
+            orientation='horizontal',
+        )
+        
+        # SelectAll Sub Button
+        self.selectAll = gui.button(
+            widget=subSelectionBox,
+            master=self,
+            label="Select All",
+            callback=self.subSelectAll,
+            tooltip="Select every dictionary of the list.",
+        )
+
+        # DeselectAll Sub Button
+        self.deselectAll = gui.button(
+            widget=subSelectionBox,
+            master=self,
+            label="Deselect All",
+            callback=self.subDeselectAll,
+            tooltip="Deselect every dictionary from the list.",
+        )
         # GUI separator...
         gui.separator(widget=self.globalBox)
         
@@ -533,10 +557,15 @@ class Parathon(OWTextableBaseWidget):
         self.selectedDictionaries = list(range(len(self.dictLabels)))
         self.getSubDictList()
   
+    def subSelectAll(self):
+        self.selectedSubDictionaries = list(range(len(self.subDictLabels)))
+    
     def deselectAll(self):
         self.selectedDictionaries = []
         self.getSubDictList()
     
+    def subDeselectAll(self):
+        self.selectedSubDictionaries = []
     
     def setCaption(self, title):
         if 'captionTitle' in dir(self):
