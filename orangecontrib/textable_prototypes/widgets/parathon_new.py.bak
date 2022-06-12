@@ -480,42 +480,22 @@ class Parathon(OWTextableBaseWidget):
         self.subDictLabels = []
         tempList = []
         self.subDictUniqueLabels = set()
-        # Defines dictionaries to link sub labels code to their type
-        codeToType = {
-        'vd': 'Vocal d.',
-        'acro': 'Acronym',
-        'vsp': 'Vocal Spelling',
-        'pun': 'Punctuation',
-        'emj': 'Emoji',
-        'emt': 'Emoticon',
-        'VKG': 'Visual Kinesics Gestures',
-        'no_f2f_equivalent': 'No FTF equivalent',
-        'TKF': 'Tactile Kinesics Facial',
-        'A': 'Artifact',
-        'VS': 'Vocalisation',
-        'VQ': 'Voice Quality',
-        'VK': 'Visual Kinesics',
-        'TK': 'Tactile Kinesics',
-        'VKF': 'Visual Kinesics Facial'        
-        }
-        
-        if self.subDict == 0:
+
+        if self.subDict == 0 or not self.subDict:
             for elem in self.cmcDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
-                    for item in tempElems:
-                        tempList.append(codeToType[item])
+                    tempList.append(tempElems)
                 else:
-                    tempList.append(codeToType[elem])
+                    tempList.append(elem)
             self.subDictUniqueLabels.update(tempList)
         elif self.subDict == 1:
             for elem in self.f2fDictLabels:
                 if ',' in elem:
                     tempElems = elem.split(', ')
-                    for item in tempElems:
-                        tempList.append(codeToType[item])
+                    tempList.extend(tempElems)
                 else:
-                    tempList.append(codeToType[elem])
+                    tempList.append(elem)
             self.subDictUniqueLabels.update(tempList)
         else:
             print(self.subDict)
