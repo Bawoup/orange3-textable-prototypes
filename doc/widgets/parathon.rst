@@ -39,7 +39,6 @@ The widget is based on a Python package created by Sorcha Walsh that you can fin
 
 This widget takes a segmentation as input and applies dictionaries. The dictionaries are stored in default_dict as regex dictionaries. The files are in JSON format.
 The widget annotates the input text and extract the paralinguistic elements specific to digital communication, while relating them to the paralinguistic features present in face-to-face communication.
-However, the final result is not really that. We were not able to display it that way. 
 
 Interface
 ~~~~~~~~~
@@ -144,7 +143,6 @@ the elements of that choice. It is only possible to select one category and not 
 If one wants both categories, then one should stay in the minimal version where one chooses only the dictionaries. 
 
 The last image shows how the results are displayed via the Display widget. The result is presented in a segmentation where the position of the paratextual element in the segmentation can be seen as well as the category of each element.
-However, this is not the result we wanted to obtain.
 
 .. figure:: figures/parathon_fig6.png
 
